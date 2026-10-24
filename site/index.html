@@ -3,13 +3,213 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Usage Bar</title>
-<meta name="description" content="macOS 메뉴 막대에서 Claude 사용량(세션 · 주간 한도)을 확인하는 무료 오픈소스 앱">
-<meta property="og:title" content="Claude Usage Bar">
-<meta property="og:description" content="Claude usage in your Mac menu bar — session and weekly limits at a glance.">
+<title>Claude Usage Bar: Claude 사용량을 Mac 메뉴 막대에서 확인 (Claude usage limits in your Mac menu bar)</title>
+<meta name="description" content="Claude 5시간 세션 한도와 주간 한도를 macOS 메뉴 막대에서 확인하는 무료 오픈소스 앱. 초기화 시간, 사용량 80%·95% 알림, 초기화 전 알림. A free macOS menu bar app that shows your Claude Pro/Max usage limits, reset times and alerts.">
+<meta name="keywords" content="Claude 사용량, Claude 사용량 확인, Claude 한도, Claude 5시간 한도, Claude 주간 한도, Claude Code usage, Claude usage limit, Claude Max usage, Claude Pro limit, macOS menu bar app, Claude usage tracker">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="eocnd36">
+<meta name="theme-color" content="#e4e9ee">
+<link rel="canonical" href="https://eocnd36.github.io/ClaudeUsageBar/">
+<link rel="alternate" type="text/plain" title="LLM summary" href="https://eocnd36.github.io/ClaudeUsageBar/llms.txt">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Claude Usage Bar">
+<meta property="og:url" content="https://eocnd36.github.io/ClaudeUsageBar/">
+<meta property="og:title" content="Claude Usage Bar: Claude usage in your Mac menu bar">
+<meta property="og:description" content="See your Claude session and weekly limits next to the clock. Free and open source for macOS.">
 <meta property="og:image" content="https://eocnd36.github.io/ClaudeUsageBar/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Claude Usage Bar showing 42% session and 63% weekly usage in the macOS menu bar">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Usage Bar: Claude usage in your Mac menu bar">
+<meta name="twitter:description" content="See your Claude session and weekly limits next to the clock. Free and open source for macOS.">
+<meta name="twitter:image" content="https://eocnd36.github.io/ClaudeUsageBar/og.png">
 <link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "SoftwareApplication",
+   "name": "Claude Usage Bar",
+   "alternateName": "Claude 사용량 메뉴 막대 앱",
+   "description": "A free, open-source macOS menu bar app that shows your Claude plan usage: the 5-hour session limit, weekly limits, reset times, usage alerts and reset reminders.",
+   "applicationCategory": "DeveloperApplication",
+   "applicationSubCategory": "Menu bar utility",
+   "operatingSystem": "macOS 13 or later",
+   "processorRequirements": "Apple silicon or Intel",
+   "softwareVersion": "1.0.0",
+   "fileSize": "0.8 MB",
+   "downloadUrl": "https://github.com/eocnd36/ClaudeUsageBar/releases/latest/download/ClaudeUsageBar.zip",
+   "installUrl": "https://github.com/eocnd36/ClaudeUsageBar/releases/latest/download/ClaudeUsageBar.zip",
+   "url": "https://eocnd36.github.io/ClaudeUsageBar/",
+   "codeRepository": "https://github.com/eocnd36/ClaudeUsageBar",
+   "license": "https://opensource.org/licenses/MIT",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "inLanguage": [
+    "en",
+    "ko",
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "es",
+    "fr",
+    "de",
+    "it",
+    "pt-BR",
+    "ru"
+   ],
+   "image": "https://eocnd36.github.io/ClaudeUsageBar/og.png",
+   "screenshot": "https://eocnd36.github.io/ClaudeUsageBar/og.png",
+   "author": {
+    "@type": "Person",
+    "name": "eocnd36",
+    "url": "https://github.com/eocnd36"
+   },
+   "featureList": [
+    "Claude session (5-hour) and weekly usage in the macOS menu bar",
+    "Reset countdown and pace marker",
+    "Notifications at 80% and 95% usage",
+    "Reminders before a limit resets",
+    "Usage breakdown by product (Claude Code, chat, Cowork)",
+    "11 languages",
+    "Read-only use of the Claude Code login"
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "inLanguage": "ko",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Claude 사용량(사용 한도)은 어떻게 확인하나요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Claude Code에서 /usage 명령을 실행하거나 claude.ai 설정의 사용량 화면에서 볼 수 있습니다. Claude Usage Bar를 설치하면 현재 세션과 주간 한도 사용률이 macOS 메뉴 막대에 늘 표시되어, 따로 확인하러 가지 않아도 됩니다."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Claude의 5시간 한도는 언제 초기화되나요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Claude 구독 플랜의 세션 한도는 5시간 단위로 초기화됩니다. Claude Usage Bar는 정확한 초기화 시각과 남은 시간을 보여 주고, 원하면 초기화 5분에서 60분 전에 알림을 보냅니다."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Claude 주간 한도는 무엇인가요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "세션 한도와 별도로 7일 단위로 적용되는 사용 한도입니다. 플랜에 따라 모든 모델 공통 한도 외에 Opus나 Sonnet 전용 주간 한도가 따로 있을 수 있으며, Claude Usage Bar는 계정에 적용되는 주간 한도를 모두 표시합니다."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "claude.ai 웹과 데스크톱 앱 사용량도 포함되나요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "네. Claude 구독의 사용 한도는 claude.ai, Claude 데스크톱 앱, Claude Code가 함께 쓰기 때문에 Claude Usage Bar에 보이는 수치가 전체 사용량입니다. 이번 주 사용량이 어디서 나왔는지(Claude Code, 채팅, Cowork)도 비율로 보여 줍니다."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Claude Code 없이도 쓸 수 있나요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "아니요. Claude Usage Bar는 Claude Code에 저장된 로그인을 사용하므로, Claude 구독(Pro, Max, Team) 계정으로 Claude Code에 한 번 로그인해 두어야 합니다."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "안전한가요? 내 계정 정보는 어디로 가나요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "로그인 토큰은 사용량을 불러올 때 Anthropic 서버(api.anthropic.com)에만 전송되고 다른 서버나 분석 도구는 쓰지 않습니다. Claude Code 로그인은 읽기만 하고 바꾸지 않으며, 소스 코드가 모두 GitHub에 공개되어 있습니다."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "무료인가요? 어떤 Mac에서 쓸 수 있나요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "무료 오픈소스(MIT 라이선스)입니다. macOS 13 Ventura 이상에서 동작하며 Apple Silicon과 Intel Mac을 모두 지원합니다."
+     }
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "inLanguage": "en",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "How do I check my Claude usage limits?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Run /usage in Claude Code, or open the usage page in claude.ai settings. With Claude Usage Bar installed, your current session and weekly limit usage stays visible in the macOS menu bar, so you never have to go looking."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "When does Claude's 5-hour limit reset?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Session limits on Claude subscription plans reset in 5-hour windows. Claude Usage Bar shows the exact reset time and the time remaining, and can remind you 5 to 60 minutes before the reset."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What is Claude's weekly limit?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It's a usage limit applied over 7 days, separate from the session limit. Depending on your plan there may be a separate weekly limit for Opus or Sonnet in addition to the all-models limit. Claude Usage Bar shows every weekly limit that applies to your account."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does it include usage from claude.ai and the desktop app?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Claude subscription limits are shared across claude.ai, the Claude desktop app and Claude Code, so the numbers in Claude Usage Bar are your total usage. It also shows where this week's usage came from: Claude Code, chat or Cowork."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can I use it without Claude Code?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Claude Usage Bar uses the login saved by Claude Code, so you need to sign in to Claude Code once with a Claude Pro, Max or Team plan."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Is it safe? Where does my account data go?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Your login token is only sent to Anthropic (api.anthropic.com) to fetch usage. There are no other servers and no analytics. The app reads the Claude Code login without changing it, and all of the source code is public on GitHub."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Is it free? Which Macs does it support?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It's free and open source under the MIT License. It runs on macOS 13 Ventura or later, on both Apple silicon and Intel Macs."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root {
@@ -251,6 +451,24 @@ code, .cmd {
 .privacy h3 { margin: 0 0 6px; font-size: 18px; }
 .privacy p { margin: 0; color: var(--muted); font-size: 16px; word-break: keep-all; }
 
+.faq { max-width: 50em; margin-top: 28px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  cursor: pointer; list-style: none;
+  padding: 20px 36px 20px 0; position: relative;
+  font-size: 18px; font-weight: 650; letter-spacing: -.01em; word-break: keep-all;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ""; position: absolute; right: 6px; top: 50%;
+  width: 9px; height: 9px; margin-top: -7px;
+  border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg); transition: transform .2s;
+}
+.faq details[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
+.faq details p { margin: -6px 0 22px; color: var(--muted); max-width: 42em; word-break: keep-all; }
+@media (prefers-reduced-motion: reduce) { .faq summary::after { transition: none; } }
+
 footer { max-width: 1180px; margin: 0 auto; padding: 40px 32px 56px; color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 28px; }
 footer .grow { flex: 1; min-width: 240px; }
 
@@ -478,6 +696,27 @@ footer .grow { flex: 1; min-width: 240px; }
         <h3><span data-l="ko">언제든 연결 해제</span><span data-l="en">Disconnect anytime</span></h3>
         <p><span data-l="ko">설정에서 연결 해제를 누르면 조회를 멈추고, 앱에 있던 사용량과 계정 정보를 모두 지웁니다.</span><span data-l="en">Press Disconnect in Settings to stop checking and clear all usage and account data from the app.</span></p>
       </div>
+    </div>
+  </section>
+  <section class="section" id="faq">
+    <h2><span data-l="ko">자주 묻는 질문</span><span data-l="en">Questions and answers</span></h2>
+    <div class="faq" data-l="ko">
+      <details><summary>Claude 사용량(사용 한도)은 어떻게 확인하나요?</summary><p>Claude Code에서 /usage 명령을 실행하거나 claude.ai 설정의 사용량 화면에서 볼 수 있습니다. Claude Usage Bar를 설치하면 현재 세션과 주간 한도 사용률이 macOS 메뉴 막대에 늘 표시되어, 따로 확인하러 가지 않아도 됩니다.</p></details>
+      <details><summary>Claude의 5시간 한도는 언제 초기화되나요?</summary><p>Claude 구독 플랜의 세션 한도는 5시간 단위로 초기화됩니다. Claude Usage Bar는 정확한 초기화 시각과 남은 시간을 보여 주고, 원하면 초기화 5분에서 60분 전에 알림을 보냅니다.</p></details>
+      <details><summary>Claude 주간 한도는 무엇인가요?</summary><p>세션 한도와 별도로 7일 단위로 적용되는 사용 한도입니다. 플랜에 따라 모든 모델 공통 한도 외에 Opus나 Sonnet 전용 주간 한도가 따로 있을 수 있으며, Claude Usage Bar는 계정에 적용되는 주간 한도를 모두 표시합니다.</p></details>
+      <details><summary>claude.ai 웹과 데스크톱 앱 사용량도 포함되나요?</summary><p>네. Claude 구독의 사용 한도는 claude.ai, Claude 데스크톱 앱, Claude Code가 함께 쓰기 때문에 Claude Usage Bar에 보이는 수치가 전체 사용량입니다. 이번 주 사용량이 어디서 나왔는지(Claude Code, 채팅, Cowork)도 비율로 보여 줍니다.</p></details>
+      <details><summary>Claude Code 없이도 쓸 수 있나요?</summary><p>아니요. Claude Usage Bar는 Claude Code에 저장된 로그인을 사용하므로, Claude 구독(Pro, Max, Team) 계정으로 Claude Code에 한 번 로그인해 두어야 합니다.</p></details>
+      <details><summary>안전한가요? 내 계정 정보는 어디로 가나요?</summary><p>로그인 토큰은 사용량을 불러올 때 Anthropic 서버(api.anthropic.com)에만 전송되고 다른 서버나 분석 도구는 쓰지 않습니다. Claude Code 로그인은 읽기만 하고 바꾸지 않으며, 소스 코드가 모두 GitHub에 공개되어 있습니다.</p></details>
+      <details><summary>무료인가요? 어떤 Mac에서 쓸 수 있나요?</summary><p>무료 오픈소스(MIT 라이선스)입니다. macOS 13 Ventura 이상에서 동작하며 Apple Silicon과 Intel Mac을 모두 지원합니다.</p></details>
+    </div>
+    <div class="faq" data-l="en">
+      <details><summary>How do I check my Claude usage limits?</summary><p>Run /usage in Claude Code, or open the usage page in claude.ai settings. With Claude Usage Bar installed, your current session and weekly limit usage stays visible in the macOS menu bar, so you never have to go looking.</p></details>
+      <details><summary>When does Claude's 5-hour limit reset?</summary><p>Session limits on Claude subscription plans reset in 5-hour windows. Claude Usage Bar shows the exact reset time and the time remaining, and can remind you 5 to 60 minutes before the reset.</p></details>
+      <details><summary>What is Claude's weekly limit?</summary><p>It's a usage limit applied over 7 days, separate from the session limit. Depending on your plan there may be a separate weekly limit for Opus or Sonnet in addition to the all-models limit. Claude Usage Bar shows every weekly limit that applies to your account.</p></details>
+      <details><summary>Does it include usage from claude.ai and the desktop app?</summary><p>Yes. Claude subscription limits are shared across claude.ai, the Claude desktop app and Claude Code, so the numbers in Claude Usage Bar are your total usage. It also shows where this week's usage came from: Claude Code, chat or Cowork.</p></details>
+      <details><summary>Can I use it without Claude Code?</summary><p>No. Claude Usage Bar uses the login saved by Claude Code, so you need to sign in to Claude Code once with a Claude Pro, Max or Team plan.</p></details>
+      <details><summary>Is it safe? Where does my account data go?</summary><p>Your login token is only sent to Anthropic (api.anthropic.com) to fetch usage. There are no other servers and no analytics. The app reads the Claude Code login without changing it, and all of the source code is public on GitHub.</p></details>
+      <details><summary>Is it free? Which Macs does it support?</summary><p>It's free and open source under the MIT License. It runs on macOS 13 Ventura or later, on both Apple silicon and Intel Macs.</p></details>
     </div>
   </section>
 </main>
