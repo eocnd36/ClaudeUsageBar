@@ -70,7 +70,7 @@ enum Notifier {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
-        content.sound = .default
+        content.sound = UserDefaults.standard.bool(forKey: AppSettings.notificationSound) ? .default : nil
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request) { error in
             if let error {

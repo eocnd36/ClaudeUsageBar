@@ -99,3 +99,4 @@
 "At this pace, you'll hit the limit at %@" = "照目前速度，將在 %@ 達到上限";
 "Estimated from how fast you've used this limit so far." = "根據你目前使用此限額的速度估算。";
 "Open usage on claude.ai" = "在 claude.ai 查看用量";
+"Play a sound with notifications" = "通知時播放聲音";

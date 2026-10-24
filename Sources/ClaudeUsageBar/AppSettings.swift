@@ -17,6 +17,8 @@ enum AppSettings {
     static let resetReminderMinimumPercent = "resetReminderMinimumPercent"
     /// Claude 장애 알림
     static let statusAlertsEnabled = "statusAlertsEnabled"
+    /// 알림과 함께 소리를 낼지
+    static let notificationSound = "notificationSound"
 
     static let refreshOptions = [1, 2, 5, 10, 15, 30]
     static let maxAlertThresholds = 5
@@ -36,6 +38,7 @@ enum AppSettings {
             notifyOnReset: false,
             resetReminderMinimumPercent: 50,
             statusAlertsEnabled: true,
+            notificationSound: true,
         ])
         // 1.0.0에서는 "0분 전"이 꺼짐을 뜻했습니다.
         if defaults.object(forKey: resetReminderMinutes) != nil, defaults.integer(forKey: resetReminderMinutes) == 0 {

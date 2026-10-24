@@ -16,6 +16,7 @@ struct SettingsView: View {
     @AppStorage(AppSettings.notifyOnReset) private var notifyOnReset = false
     @AppStorage(AppSettings.resetReminderMinimumPercent) private var minimumPercent = 50
     @AppStorage(AppSettings.statusAlertsEnabled) private var statusAlertsEnabled = true
+    @AppStorage(AppSettings.notificationSound) private var notificationSound = true
     @State private var launchAtLogin = LoginItem.isEnabled
     @State private var loginItemError: String?
     @State private var language = AppLanguage.override ?? ""
@@ -169,6 +170,8 @@ struct SettingsView: View {
             }
 
             Toggle("Alert me when Claude has an outage", isOn: $statusAlertsEnabled)
+
+            Toggle("Play a sound with notifications", isOn: $notificationSound)
 
             Button {
                 Notifier.requestAuthorization()

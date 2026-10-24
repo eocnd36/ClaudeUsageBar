@@ -99,3 +99,4 @@
 "At this pace, you'll hit the limit at %@" = "이 속도면 %@에 한도 도달";
 "Estimated from how fast you've used this limit so far." = "지금까지 이 한도를 쓴 속도로 계산한 예상이에요.";
 "Open usage on claude.ai" = "claude.ai에서 사용량 보기";
+"Play a sound with notifications" = "알림 소리 켜기";
