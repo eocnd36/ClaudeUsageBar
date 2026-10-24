@@ -75,9 +75,27 @@
 "Claude Code setup guide" = "Guía de instalación de Claude Code";
 
 /* Reset reminders */
-"Reset reminder" = "Aviso de restablecimiento";
-"Off" = "Desactivado";
-"%lld min before" = "%lld min antes";
-"Only for limits at %@ or more" = "Solo para límites al %@ o más";
 "%@ resets in %@" = "%1$@ se restablece en %2$@";
 "Currently at %@. Your usage will be available again soon." = "Uso actual: %@. Pronto volverás a tener uso disponible.";
+
+/* Notification settings and status */
+"%@ has reset" = "%@ se ha restablecido";
+"Your usage is available again." = "Ya puedes volver a usarlo.";
+"Notifications" = "Notificaciones";
+"Remind before a limit resets" = "Avisar antes del restablecimiento";
+"min before" = "min antes";
+"Notify when a limit resets" = "Avisar cuando se restablezca un límite";
+"Only for limits used at least" = "Solo límites con uso de al menos";
+"Alert me when Claude has an outage" = "Avisar si Claude tiene una incidencia";
+"Add" = "Añadir";
+"Send test notification" = "Enviar notificación de prueba";
+"Sent" = "Enviada";
+"Test notification" = "Notificación de prueba";
+"Notifications from Claude Usage Bar are working." = "Las notificaciones de Claude Usage Bar funcionan.";
+"Notifications are turned off for this app." = "Las notificaciones de esta app están desactivadas.";
+"Open Notification Settings" = "Abrir ajustes de notificaciones";
+"Claude is having issues" = "Claude tiene problemas";
+"View status" = "Ver estado";
+"At this pace, you'll hit the limit at %@" = "A este ritmo, alcanzarás el límite a las %@";
+"Estimated from how fast you've used this limit so far." = "Estimación basada en lo rápido que has usado este límite hasta ahora.";
+"Open usage on claude.ai" = "Ver el uso en claude.ai";

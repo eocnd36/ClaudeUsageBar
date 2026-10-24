@@ -27,7 +27,9 @@ enum DebugSnapshot {
             }
             try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             for scheme in [ColorScheme.light, .dark] {
-                let view = PopoverView()
+                // ScrollView는 ImageRenderer가 그리지 못하므로 사용량 화면만 렌더링합니다.
+                let view = UsageView {}
+                    .frame(width: 320)
                     .environmentObject(store)
                     .background(scheme == .dark ? Color(white: 0.16) : Color(white: 0.97))
                     .environment(\.colorScheme, scheme)

@@ -5,29 +5,80 @@ import SwiftUI
 struct PopoverView: View {
     @EnvironmentObject private var store: UsageStore
     @State private var showingSettings = false
+    @State private var contentHeight: CGFloat = 420
+
+    /// 화면보다 길어지면 스크롤합니다 (작은 화면에서 설정 화면이 잘리지 않도록).
+    private var maxHeight: CGFloat {
+        (NSScreen.main?.visibleFrame.height ?? 800) - 24
+    }
 
     var body: some View {
-        Group {
-            if showingSettings {
-                SettingsView { showingSettings = false }
-            } else {
-                UsageView { showingSettings = true }
+        let height = min(contentHeight, maxHeight)
+        ScrollView(.vertical) {
+            Group {
+                if showingSettings {
+                    SettingsView { showingSettings = false }
+                } else {
+                    UsageView { showingSettings = true }
+                }
             }
+            .frame(width: 320)
+            .fixedSize(horizontal: false, vertical: true)
+            .background(GeometryReader { proxy in
+                Color.clear.preference(key: ContentHeightKey.self, value: proxy.size.height)
+            })
         }
-        .frame(width: 320)
+        .scrollIndicators(contentHeight > maxHeight ? .automatic : .never)
+        .frame(width: 320, height: height)
+        .onPreferenceChange(ContentHeightKey.self) { contentHeight = $0 }
+        .background(WindowHeightFitter(height: height))
         .task { await store.refresh(force: false) }
+    }
+}
+
+private struct ContentHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
+    }
+}
+
+/// MenuBarExtra(.window)의 창은 내용이 커지면 늘어나지만 작아지면 줄어들지 않습니다.
+/// (설정 → 사용량으로 돌아오면 위아래에 빈 공간이 남던 문제)
+/// 내용 높이에 맞춰 창 크기를 직접 조정하고, 창 위쪽은 메뉴 막대 바로 아래에 붙여 둡니다.
+private struct WindowHeightFitter: NSViewRepresentable {
+    let height: CGFloat
+
+    func makeNSView(context: Context) -> NSView { NSView() }
+
+    func updateNSView(_ view: NSView, context: Context) {
+        DispatchQueue.main.async {
+            guard let window = view.window, height > 0 else { return }
+            let frame = window.frame
+            let frameHeight = window.frameRect(forContentRect: NSRect(x: 0, y: 0, width: frame.width, height: height)).height
+            // 메뉴 막대를 덮지 않도록 위쪽 끝을 화면의 사용 가능 영역 안으로 제한합니다.
+            let topLimit = (window.screen ?? NSScreen.main)?.visibleFrame.maxY ?? frame.maxY
+            let top = min(frame.maxY, topLimit)
+            let target = NSRect(x: frame.minX, y: top - frameHeight, width: frame.width, height: frameHeight)
+            guard abs(target.height - frame.height) > 0.5 || abs(target.maxY - frame.maxY) > 0.5 else { return }
+            window.setFrame(target, display: true)
+        }
     }
 }
 
 // MARK: - Usage page
 
-private struct UsageView: View {
+struct UsageView: View {
     @EnvironmentObject private var store: UsageStore
     let openSettings: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             header
+
+            if store.isConnected, let status = store.serviceStatus, status.hasProblem {
+                StatusBanner(status: status)
+            }
 
             if !store.isConnected {
                 ConnectView()
@@ -102,6 +153,11 @@ private struct UsageView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Spacer()
+            Link(destination: AppInfo.claudeUsageURL) {
+                Image(systemName: "arrow.up.forward.app")
+            }
+            .buttonStyle(IconButtonStyle())
+            .help(Text("Open usage on claude.ai"))
             Button(action: openSettings) {
                 Image(systemName: "gearshape")
             }
@@ -144,7 +200,45 @@ private struct LimitRow: View {
             Text(Formatters.resetDescription(item.resetsAt, now: now))
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            if let hit = item.projectedLimitDate(now: now) {
+                Label(Formatters.projectionDescription(hit, now: now), systemImage: "chart.line.uptrend.xyaxis")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .help(Text("Estimated from how fast you've used this limit so far."))
+            }
         }
+    }
+}
+
+/// status.claude.com에 장애가 있을 때 보여 줍니다.
+private struct StatusBanner: View {
+    let status: ServiceStatus
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(status.level == .major || status.level == .critical ? .red : .orange)
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Claude is having issues")
+                    .font(.caption.weight(.semibold))
+                ForEach(status.incidents.prefix(2)) { incident in
+                    Text(verbatim: incident.name)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if status.incidents.isEmpty, !status.summary.isEmpty {
+                    Text(verbatim: status.summary)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+                Link(String(localized: "View status"), destination: status.incidents.first?.url ?? ServiceStatus.pageURL)
+                    .font(.caption2)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 8).fill(Color.orange.opacity(0.1)))
     }
 }
 

@@ -2,19 +2,21 @@
 
 > Claude Usage Bar is a free, open-source macOS menu bar app that shows your Claude subscription usage: the 5-hour session limit and weekly limits, with reset times, usage alerts and reminders before a limit resets. It works with Claude Pro, Max and Team plans and runs on macOS 13 or later (Apple silicon and Intel).
 
-Korean: Claude Usage Bar는 Claude 5시간 세션 한도와 주간 한도 사용량을 macOS 메뉴 막대에 표시하는 무료 오픈소스 앱입니다. 초기화 시간, 사용량 80%·95% 알림, 초기화 전 알림을 제공합니다.
+Korean: Claude Usage Bar는 Claude 5시간 세션 한도와 주간 한도 사용량을 macOS 메뉴 막대에 표시하는 무료 오픈소스 앱입니다. 초기화 시간, 한도 도달 예측, 원하는 사용률에서 알림, 초기화 전·초기화 시 알림, Claude 장애 알림을 제공합니다.
 
 ## What it does
 
 - Shows a ring gauge and session/weekly percentages (for example "42% · 63%") in the macOS menu bar, next to the clock. The gauge turns red above 90%.
 - Clicking it opens a popover with the current 5-hour session, weekly limits (all models, plus Opus or Sonnet limits when the plan has them), time until each limit resets, a pace marker showing how much of the window has passed, and this week's usage split by product (Claude Code, chat, Cowork).
-- Sends a notification at 80% and 95% usage, and a reminder 5, 15, 30 or 60 minutes before a limit resets (only for limits at 50% or more).
+- Sends notifications at usage percentages the user chooses (80% and 95% by default), a reminder a chosen number of minutes before a limit resets, and optionally a notification the moment a limit resets. Reset notifications only fire for limits used at least a chosen percentage (50% by default).
+- Estimates when you'll hit a limit at your current pace ("At this pace, you'll hit the limit at 3:20 PM").
+- Checks the official Claude status page (status.claude.com) and shows a banner and notification when Claude has an outage.
 - Available in English, Korean, Japanese, Simplified Chinese, Traditional Chinese, Spanish, French, German, Italian, Brazilian Portuguese and Russian.
 
 ## How it works
 
 - It needs Claude Code signed in with a Claude subscription. There is no separate sign-in: after the user presses Connect, the app reads the OAuth login that Claude Code stores in the macOS Keychain. It reads that login but never changes it.
-- It requests the same usage data that Claude Code's `/usage` command shows, from api.anthropic.com only. There are no other servers and no analytics.
+- It requests the same usage data that Claude Code's `/usage` command shows, from api.anthropic.com. The login is never sent anywhere else. The only other request is to the public status page (status.claude.com), which includes no account data. There are no analytics.
 - Usage limits are shared across claude.ai, the Claude desktop app and Claude Code, so the numbers show total usage.
 - Disconnect in Settings stops all requests and clears the app's data.
 

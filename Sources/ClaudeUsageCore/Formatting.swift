@@ -86,7 +86,7 @@ public struct ResetReminder: Equatable, Sendable {
 
 public enum ResetReminderPlanner {
     /// - Parameters:
-    ///   - leadTime: 초기화 몇 초 전에 알릴지
+    ///   - leadTime: 초기화 몇 초 전에 알릴지. 0이면 초기화되는 순간에 알립니다.
     ///   - minimumPercent: 이 사용률 이상인 한도만 알립니다 (거의 안 쓴 세션까지 매번 알리지 않도록).
     /// 알림 시각이 이미 지났으면 제외합니다 (늦게 울리는 알림 방지).
     public static func reminders(
@@ -95,7 +95,7 @@ public enum ResetReminderPlanner {
         minimumPercent: Double,
         now: Date
     ) -> [ResetReminder] {
-        guard leadTime > 0 else { return [] }
+        guard leadTime >= 0 else { return [] }
         return snapshot.limits.compactMap { item in
             guard item.percent >= minimumPercent, let resetsAt = item.resetsAt else { return nil }
             let fireDate = resetsAt.addingTimeInterval(-leadTime)

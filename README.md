@@ -35,8 +35,9 @@ macOS 메뉴 막대에 현재 세션과 주간 한도를 늘 띄워 두는 무�
 | **메뉴 막대에 늘 표시** | 원형 게이지와 `42% · 63%`(세션 · 주간)를 시계 옆에 띄워 둡니다. 90%를 넘으면 게이지가 빨간색으로 바뀌어요. |
 | **한눈에 보는 상세 화면** | 5시간 세션, 주간 한도(모든 모델, 플랜에 따라 Opus · Sonnet), 초기화까지 남은 시간, 이번 주 사용처(Claude Code, 채팅, Cowork) |
 | **페이스 눈금** | 막대 위 세로선은 한도 기간 중 지나간 시간이에요. 막대가 눈금보다 앞서 있으면 평소보다 빨리 쓰고 있다는 뜻입니다. |
-| **한도 알림** | 사용량이 80%와 95%를 넘으면 알려 드려요. |
-| **초기화 전 알림** | 한도가 초기화되기 5 · 15 · 30 · 60분 전에 알려 드려요(기본 15분). 사용량 50% 이상인 한도에만 보내서 귀찮지 않습니다. |
+| **한도 도달 예측** | 지금 속도로 쓰면 언제 한도에 닿는지 미리 보여 줘요. "이 속도면 오후 3:20에 한도 도달" |
+| **내 맘대로 알림** | 알림 받을 사용률(기본 80%, 95%)과 초기화 몇 분 전에 알릴지 직접 입력해요. 한도가 다시 채워지는 순간에도 알려 드릴 수 있어요. |
+| **Claude 장애 알림** | 공식 상태 페이지(status.claude.com)에 장애가 올라오면 배너와 알림으로 알려 줘요. 내 문제인지 Claude 문제인지 바로 알 수 있습니다. |
 | **연결과 연결 해제** | 직접 "연결"을 눌러야 계정이 연결되고, 설정에서 언제든 연결을 해제할 수 있어요. 해제하면 앱에 있던 데이터를 모두 지웁니다. |
 | **11개 언어** | English, 한국어, 日本語, 简体中文, 繁體中文, Español, Français, Deutsch, Italiano, Português (Brasil), Русский |
 | **가볍게** | Dock 아이콘 없이 메뉴 막대에서만 동작하고, 외부 라이브러리 없이 2.5MB 정도입니다. 라이트 · 다크 모드를 지원해요. |
@@ -63,7 +64,7 @@ macOS 메뉴 막대에 현재 세션과 주간 한도를 늘 띄워 두는 무�
 
 ## 개인정보
 
-- **Anthropic으로만 전송**: 로그인 토큰은 사용량을 불러올 때 `api.anthropic.com`에만 보냅니다. 다른 서버나 분석 도구는 쓰지 않아요.
+- **Anthropic으로만 전송**: 로그인 토큰은 사용량을 불러올 때 `api.anthropic.com`에만 보냅니다. 그 밖에는 계정 정보 없이 공개 상태 페이지(`status.claude.com`)만 확인하고, 분석 도구는 쓰지 않아요.
 - **읽기만 합니다**: Claude Code가 키체인에 저장한 로그인을 읽기만 하고 바꾸지 않아서, Claude Code에는 아무 영향이 없습니다.
 - **저장하지 않습니다**: 사용량과 계정 정보는 메모리에만 두고, 연결을 해제하면 바로 지웁니다.
 
@@ -125,7 +126,9 @@ scripts/                   .app 패키징, 아이콘 생성, 번역 검사
 - **Always visible.** A ring gauge with `session% · weekly%` that turns red past 90%.
 - **Detail at a click.** The 5-hour session, weekly limits (all models, plus Opus and Sonnet on some plans), reset countdowns, and this week's split by product.
 - **Pace marker.** A tick shows how much of the window has passed. If the bar is ahead of the tick, you're using Claude faster than usual.
-- **Alerts.** Get notified at 80% and 95%, and 5–60 minutes before a limit resets. Reset reminders only fire for limits that are at least half used.
+- **Limit projection.** See when you'll hit a limit at your current pace.
+- **Alerts your way.** Choose the percentages that trigger alerts, how many minutes before a reset you want a reminder, and whether to be notified the moment a limit refills.
+- **Outage alerts.** Get a banner and notification when status.claude.com reports a Claude incident.
 - **Connect and disconnect.** Nothing is read until you press Connect. Disconnect anytime in Settings to clear all data from the app.
 - **11 languages.** Follows your system language, or pick one in Settings.
 
@@ -139,7 +142,7 @@ You need macOS 13 or later and [Claude Code](https://docs.claude.com/en/docs/cla
 
 ### Privacy
 
-The app reads the OAuth token Claude Code keeps in your Keychain. It never changes that token, so Claude Code keeps working as before. The token is only sent to `api.anthropic.com`, which returns the same data as Claude Code's `/usage`. Usage and account data stay in memory, and Disconnect clears them.
+The app reads the OAuth token Claude Code keeps in your Keychain. It never changes that token, so Claude Code keeps working as before. The token is only sent to `api.anthropic.com`, which returns the same data as Claude Code's `/usage`. The only other request is to the public status page `status.claude.com`, with no account data. Usage and account data stay in memory, and Disconnect clears them.
 
 ---
 

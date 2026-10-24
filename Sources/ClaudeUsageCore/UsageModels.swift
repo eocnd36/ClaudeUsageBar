@@ -123,6 +123,20 @@ public struct LimitItem: Identifiable, Equatable, Sendable {
         self.resetsAt = resetsAt
     }
 
+    /// 지금 속도로 계속 쓰면 한도(100%)에 닿는 시각.
+    /// 초기화 전에 닿지 않거나, 판단하기엔 경과 시간이 너무 짧으면 nil.
+    /// (창 시작부터 일정한 속도로 썼다고 보는 단순한 선형 예측)
+    public func projectedLimitDate(now: Date) -> Date? {
+        guard let resetsAt, percent > 0, percent < 100 else { return nil }
+        let remaining = resetsAt.timeIntervalSince(now)
+        let elapsed = kind.windowDuration - remaining
+        // 창 초반의 몇 분 사용량으로 예측하면 크게 튀므로 일정 시간이 지난 뒤부터 계산합니다.
+        guard remaining > 0, elapsed >= max(kind.windowDuration * 0.05, 15 * 60) else { return nil }
+        let ratePerSecond = percent / elapsed
+        let hitDate = now.addingTimeInterval((100 - percent) / ratePerSecond)
+        return hitDate < resetsAt ? hitDate : nil
+    }
+
     /// 현재 한도 창에서 경과한 시간 비율 (0...1). 초기화 시각을 모르면 nil.
     public func elapsedFraction(now: Date) -> Double? {
         guard let resetsAt else { return nil }

@@ -234,7 +234,12 @@ private func decodeSample() throws -> UsageResponse {
 
     @Test func skipsUnknownResetAndDisabled() {
         #expect(plan([LimitItem(kind: .session, percent: 90, resetsAt: nil)]).isEmpty)
-        #expect(plan([LimitItem(kind: .session, percent: 90, resetsAt: now.addingTimeInterval(3600))], lead: 0).isEmpty)
+        #expect(plan([LimitItem(kind: .session, percent: 90, resetsAt: now.addingTimeInterval(3600))], lead: -1).isEmpty)
+    }
+
+    @Test func zeroLeadFiresAtReset() {
+        let reset = now.addingTimeInterval(3600)
+        #expect(plan([LimitItem(kind: .session, percent: 90, resetsAt: reset)], lead: 0).map(\.fireDate) == [reset])
     }
 
     @Test func coversEachEligibleLimit() {
@@ -244,5 +249,64 @@ private func decodeSample() throws -> UsageResponse {
             LimitItem(kind: .weeklyOpus, percent: 95, resetsAt: now.addingTimeInterval(86400)),
         ])
         #expect(reminders.map(\.item.kind) == [.session, .weeklyOpus])
+    }
+}
+
+
+@Suite struct ProjectionTests {
+    let now = Date(timeIntervalSince1970: 1_000_000)
+
+    @Test func projectsHitBeforeReset() throws {
+        // 5시간 창 중 2시간 경과, 60% 사용 → 30%/h → 남은 40%는 80분 뒤
+        let item = LimitItem(kind: .session, percent: 60, resetsAt: now.addingTimeInterval(3 * 3600))
+        let hit = try #require(item.projectedLimitDate(now: now))
+        #expect(abs(hit.timeIntervalSince(now) - 80 * 60) < 1)
+    }
+
+    @Test func nilWhenOnPace() {
+        // 2시간 경과, 30% → 5시간 끝에 75%
+        let item = LimitItem(kind: .session, percent: 30, resetsAt: now.addingTimeInterval(3 * 3600))
+        #expect(item.projectedLimitDate(now: now) == nil)
+    }
+
+    @Test func nilTooEarlyOrAtLimit() {
+        let early = LimitItem(kind: .session, percent: 20, resetsAt: now.addingTimeInterval(5 * 3600 - 600))
+        #expect(early.projectedLimitDate(now: now) == nil)
+        let full = LimitItem(kind: .session, percent: 100, resetsAt: now.addingTimeInterval(3600))
+        #expect(full.projectedLimitDate(now: now) == nil)
+        #expect(LimitItem(kind: .session, percent: 50, resetsAt: nil).projectedLimitDate(now: now) == nil)
+    }
+}
+
+@Suite struct ServiceStatusTests {
+    let sample = """
+    { "page": { "name": "Claude" },
+      "status": { "indicator": "minor", "description": "Partially Degraded Service" },
+      "components": [],
+      "incidents": [
+        { "id": "a1", "name": "Elevated errors on Claude Opus", "status": "investigating", "shortlink": "https://stspg.io/x" },
+        { "id": "b2", "name": "Old issue", "status": "resolved" }
+      ] }
+    """
+
+    @Test func parsesSummary() throws {
+        let status = try StatusClient.parse(Data(sample.utf8))
+        #expect(status.level == .minor)
+        #expect(status.summary == "Partially Degraded Service")
+        #expect(status.incidents.map(\.id) == ["a1"])
+        #expect(status.hasProblem)
+    }
+
+    @Test func operational() throws {
+        let json = #"{ "status": { "indicator": "none", "description": "All Systems Operational" }, "incidents": [] }"#
+        #expect(try StatusClient.parse(Data(json.utf8)).hasProblem == false)
+    }
+
+    @Test func newIncidentsOnlyAfterFirstFetch() throws {
+        let status = try StatusClient.parse(Data(sample.utf8))
+        #expect(StatusClient.newIncidents(from: nil, to: status).isEmpty)
+        let calm = ServiceStatus(level: .operational, summary: "")
+        #expect(StatusClient.newIncidents(from: calm, to: status).map(\.id) == ["a1"])
+        #expect(StatusClient.newIncidents(from: status, to: status).isEmpty)
     }
 }

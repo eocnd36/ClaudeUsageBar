@@ -75,9 +75,27 @@
 "Claude Code setup guide" = "Claude Code セットアップガイド";
 
 /* Reset reminders */
-"Reset reminder" = "リセット通知";
-"Off" = "オフ";
-"%lld min before" = "%lld分前";
-"Only for limits at %@ or more" = "使用量が%@以上の上限のみ";
 "%@ resets in %@" = "%1$@はあと%2$@でリセット";
 "Currently at %@. Your usage will be available again soon." = "現在%@使用中。まもなく使用量が回復します。";
+
+/* Notification settings and status */
+"%@ has reset" = "%@がリセットされました";
+"Your usage is available again." = "また使えるようになりました。";
+"Notifications" = "通知";
+"Remind before a limit resets" = "リセット前に通知";
+"min before" = "分前";
+"Notify when a limit resets" = "リセット時に通知";
+"Only for limits used at least" = "最低使用率";
+"Alert me when Claude has an outage" = "Claudeの障害を通知";
+"Add" = "追加";
+"Send test notification" = "テスト通知を送信";
+"Sent" = "送信しました";
+"Test notification" = "テスト通知";
+"Notifications from Claude Usage Bar are working." = "Claude Usage Barの通知は正常に動作しています。";
+"Notifications are turned off for this app." = "このアプリの通知がオフになっています。";
+"Open Notification Settings" = "通知設定を開く";
+"Claude is having issues" = "Claudeで障害が発生しています";
+"View status" = "ステータスを見る";
+"At this pace, you'll hit the limit at %@" = "このペースだと%@に上限に達します";
+"Estimated from how fast you've used this limit so far." = "これまでの使用ペースから計算した予測です。";
+"Open usage on claude.ai" = "claude.aiで使用量を見る";

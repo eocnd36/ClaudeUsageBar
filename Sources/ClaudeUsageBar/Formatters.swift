@@ -33,6 +33,14 @@ enum Formatters {
         return String(localized: "Resets \(day) (in \(countdown(remaining)))")
     }
 
+    /// "이 속도면 오후 3:20에 한도 도달" (하루 이상 뒤면 요일 포함)
+    static func projectionDescription(_ date: Date, now: Date) -> String {
+        let style: Date.FormatStyle = date.timeIntervalSince(now) < 86400 && Calendar.current.isDate(date, inSameDayAs: now)
+            ? .dateTime.locale(appLocale).hour().minute()
+            : .dateTime.locale(appLocale).weekday(.abbreviated).hour().minute()
+        return String(localized: "At this pace, you'll hit the limit at \(date.formatted(style))")
+    }
+
     static func updatedDescription(_ date: Date?, now: Date) -> String {
         guard let date else { return "" }
         let elapsed = now.timeIntervalSince(date)

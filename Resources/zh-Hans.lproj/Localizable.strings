@@ -75,9 +75,27 @@
 "Claude Code setup guide" = "Claude Code 安装指南";
 
 /* Reset reminders */
-"Reset reminder" = "重置提醒";
-"Off" = "关闭";
-"%lld min before" = "提前 %lld 分钟";
-"Only for limits at %@ or more" = "仅限用量达到 %@ 及以上";
 "%@ resets in %@" = "%1$@将在%2$@后重置";
 "Currently at %@. Your usage will be available again soon." = "当前已用 %@。用量即将恢复。";
+
+/* Notification settings and status */
+"%@ has reset" = "%@已重置";
+"Your usage is available again." = "用量已恢复。";
+"Notifications" = "通知";
+"Remind before a limit resets" = "重置前提醒";
+"min before" = "分钟前";
+"Notify when a limit resets" = "重置时通知";
+"Only for limits used at least" = "最低用量";
+"Alert me when Claude has an outage" = "Claude 故障提醒";
+"Add" = "添加";
+"Send test notification" = "发送测试通知";
+"Sent" = "已发送";
+"Test notification" = "测试通知";
+"Notifications from Claude Usage Bar are working." = "Claude Usage Bar 的通知工作正常。";
+"Notifications are turned off for this app." = "此应用的通知已关闭。";
+"Open Notification Settings" = "打开通知设置";
+"Claude is having issues" = "Claude 出现故障";
+"View status" = "查看状态";
+"At this pace, you'll hit the limit at %@" = "按当前速度，将在 %@ 达到上限";
+"Estimated from how fast you've used this limit so far." = "根据你目前使用此限额的速度估算。";
+"Open usage on claude.ai" = "在 claude.ai 查看用量";

@@ -15,12 +15,17 @@ final class UsageStore: ObservableObject {
     @Published private(set) var isRefreshing = false
     /// 남은 시간 표시를 갱신하기 위한 시계 (30초마다)
     @Published private(set) var now = Date()
+    /// status.claude.com 기준 Claude 서비스 상태 (nil = 아직 모름)
+    @Published private(set) var serviceStatus: ServiceStatus?
+    /// 시스템 설정에서 이 앱의 알림이 꺼져 있는지
+    @Published private(set) var notificationsDenied = false
 
     private let client = UsageClient(
         userAgent: "ClaudeUsageBar/\(AppInfo.version)",
         languages: Bundle.main.preferredLocalizations
     )
     private let loader = CredentialLoader()
+    private let statusClient = StatusClient()
     private var pollTask: Task<Void, Never>?
     private var clockTask: Task<Void, Never>?
     private var wakeObserver: NSObjectProtocol?
@@ -56,8 +61,14 @@ final class UsageStore: ObservableObject {
 
     #if DEBUG
     /// 스크린샷용: 네트워크 없이 주어진 데이터로 채웁니다.
-    init(preview snapshot: UsageSnapshot, credentials: ClaudeCredentials, profile: AccountProfile) {
+    init(
+        preview snapshot: UsageSnapshot,
+        credentials: ClaudeCredentials,
+        profile: AccountProfile,
+        status: ServiceStatus? = nil
+    ) {
         isConnected = true
+        serviceStatus = status
         self.snapshot = snapshot
         self.credentials = credentials
         self.profile = profile
@@ -98,6 +109,7 @@ final class UsageStore: ObservableObject {
         lastAttempt = nil
         backoffUntil = nil
         claudeCodeLoginFound = nil
+        serviceStatus = nil
         Notifier.cancelResetReminders()
     }
 
@@ -132,6 +144,9 @@ final class UsageStore: ObservableObject {
                 now = Date()
             }
         }
+
+        // 서비스 상태는 계정과 무관한 공개 정보라 사용량과 별개로 불러옵니다.
+        Task { await refreshServiceStatus(generation: generation) }
 
         do {
             // 키체인 조회는 프로세스를 띄우므로 메인 스레드 밖에서 실행합니다.
@@ -184,35 +199,68 @@ final class UsageStore: ObservableObject {
         return AppSettings.refreshInterval
     }
 
-    /// 현재 스냅샷 기준으로 초기화 전 알림을 다시 예약합니다. 설정이 바뀌었을 때도 호출합니다.
+    /// 현재 스냅샷 기준으로 초기화 전 알림과 초기화 알림을 다시 예약합니다. 설정이 바뀌었을 때도 호출합니다.
     func scheduleResetReminders() {
-        let minutes = UserDefaults.standard.integer(forKey: AppSettings.resetReminderMinutes)
-        guard isConnected, let snapshot, minutes > 0 else {
+        let defaults = UserDefaults.standard
+        guard isConnected, let snapshot else {
             Notifier.cancelResetReminders()
             return
         }
-        let reminders = ResetReminderPlanner.reminders(
-            for: snapshot,
-            leadTime: TimeInterval(minutes * 60),
-            minimumPercent: Double(AppSettings.resetReminderMinimumPercent),
-            now: Date()
-        )
-        Notifier.scheduleResetReminders(reminders.map { reminder in
-            let item = reminder.item
+        let minimumPercent = Double(defaults.integer(forKey: AppSettings.resetReminderMinimumPercent))
+        var requests: [(id: String, title: String, body: String, date: Date)] = []
+
+        if defaults.bool(forKey: AppSettings.resetReminderEnabled) {
+            let minutes = max(defaults.integer(forKey: AppSettings.resetReminderMinutes), 1)
             let remaining = Formatters.countdown(TimeInterval(minutes * 60))
-            let percent = MenuBarFormatter.percentText(item.percent)
-            return (
-                id: item.kind.rawValue,
-                title: String(localized: "\(item.kind.title) resets in \(remaining)"),
-                body: String(localized: "Currently at \(percent). Your usage will be available again soon."),
-                date: reminder.fireDate
-            )
-        })
+            for reminder in ResetReminderPlanner.reminders(
+                for: snapshot, leadTime: TimeInterval(minutes * 60), minimumPercent: minimumPercent, now: Date()
+            ) {
+                let item = reminder.item
+                let percent = MenuBarFormatter.percentText(item.percent)
+                requests.append((
+                    id: "before-\(item.kind.rawValue)",
+                    title: String(localized: "\(item.kind.title) resets in \(remaining)"),
+                    body: String(localized: "Currently at \(percent). Your usage will be available again soon."),
+                    date: reminder.fireDate
+                ))
+            }
+        }
+
+        if defaults.bool(forKey: AppSettings.notifyOnReset) {
+            for reminder in ResetReminderPlanner.reminders(
+                for: snapshot, leadTime: 0, minimumPercent: minimumPercent, now: Date()
+            ) {
+                requests.append((
+                    id: "after-\(reminder.item.kind.rawValue)",
+                    title: String(localized: "\(reminder.item.kind.title) has reset"),
+                    body: String(localized: "Your usage is available again."),
+                    date: reminder.fireDate
+                ))
+            }
+        }
+
+        Notifier.scheduleResetReminders(requests)
+    }
+
+    /// 설정 화면에서 알림 권한 경고를 보여 주기 위해 확인합니다.
+    func refreshNotificationPermission() async {
+        notificationsDenied = await Notifier.isDenied()
+    }
+
+    private func refreshServiceStatus(generation: Int) async {
+        guard let status = try? await statusClient.fetch(), generation == self.generation else { return }
+        if UserDefaults.standard.bool(forKey: AppSettings.statusAlertsEnabled) {
+            for incident in StatusClient.newIncidents(from: serviceStatus, to: status) {
+                Notifier.post(title: String(localized: "Claude is having issues"), body: incident.name)
+            }
+        }
+        serviceStatus = status
     }
 
     private func notifyIfNeeded(old: UsageSnapshot?, new: UsageSnapshot) {
         guard UserDefaults.standard.bool(forKey: AppSettings.notificationsEnabled) else { return }
-        for crossing in ThresholdDetector.crossings(from: old, to: new, thresholds: AppSettings.alertThresholds) {
+        let thresholds = AppSettings.alertThresholds
+        for crossing in ThresholdDetector.crossings(from: old, to: new, thresholds: thresholds) {
             let item = crossing.item
             let percent = MenuBarFormatter.percentText(Double(crossing.threshold))
             let title = String(localized: "\(item.kind.title) reached \(percent)")

@@ -6,31 +6,64 @@ import ServiceManagement
 enum AppSettings {
     static let menuBarStyle = "menuBarStyle"
     static let refreshMinutes = "refreshMinutes"
-    static let notificationsEnabled = "notificationsEnabled"
     static let connected = "connected"
+    /// 사용량 알림 켜기/끄기와 기준 (쉼표로 구분한 퍼센트, 예: "80,95")
+    static let notificationsEnabled = "notificationsEnabled"
+    static let alertThresholdsKey = "alertThresholds"
+    /// 초기화 전 알림 / 초기화되면 알림, 그리고 두 알림에 공통으로 쓰는 최소 사용률
+    static let resetReminderEnabled = "resetReminderEnabled"
     static let resetReminderMinutes = "resetReminderMinutes"
+    static let notifyOnReset = "notifyOnReset"
+    static let resetReminderMinimumPercent = "resetReminderMinimumPercent"
+    /// Claude 장애 알림
+    static let statusAlertsEnabled = "statusAlertsEnabled"
 
     static let refreshOptions = [1, 2, 5, 10, 15, 30]
-    static let alertThresholds = [80, 95]
-    /// 0 = 끔
-    static let resetReminderOptions = [0, 5, 15, 30, 60]
-    /// 이 사용률 미만인 한도는 초기화 알림을 보내지 않습니다.
-    static let resetReminderMinimumPercent = 50
+    static let maxAlertThresholds = 5
+    static let resetReminderMinutesRange = 1...720
+    static let minimumPercentRange = 0...100
 
     static func registerDefaults() {
-        UserDefaults.standard.register(defaults: [
+        let defaults = UserDefaults.standard
+        defaults.register(defaults: [
             menuBarStyle: MenuBarStyle.sessionAndWeekly.rawValue,
             refreshMinutes: 5,
-            notificationsEnabled: true,
             connected: false,
+            notificationsEnabled: true,
+            alertThresholdsKey: "80,95",
+            resetReminderEnabled: true,
             resetReminderMinutes: 15,
+            notifyOnReset: false,
+            resetReminderMinimumPercent: 50,
+            statusAlertsEnabled: true,
         ])
+        // 1.0.0에서는 "0분 전"이 꺼짐을 뜻했습니다.
+        if defaults.object(forKey: resetReminderMinutes) != nil, defaults.integer(forKey: resetReminderMinutes) == 0 {
+            defaults.set(false, forKey: resetReminderEnabled)
+            defaults.set(15, forKey: resetReminderMinutes)
+        }
     }
 
-    /// 사용량 알림이나 초기화 알림 중 하나라도 켜져 있으면 알림 권한이 필요합니다.
+    static var alertThresholds: [Int] {
+        parseThresholds(UserDefaults.standard.string(forKey: alertThresholdsKey) ?? "")
+    }
+
+    static func parseThresholds(_ string: String) -> [Int] {
+        let values = string.split(separator: ",").compactMap { Int($0.trimmingCharacters(in: .whitespaces)) }
+        return Array(Set(values.filter { (1...100).contains($0) })).sorted()
+    }
+
+    static func formatThresholds(_ values: [Int]) -> String {
+        values.map(String.init).joined(separator: ",")
+    }
+
+    /// 알림을 하나라도 쓰면 알림 권한이 필요합니다.
     static var wantsNotifications: Bool {
-        UserDefaults.standard.bool(forKey: notificationsEnabled)
-            || UserDefaults.standard.integer(forKey: resetReminderMinutes) > 0
+        let defaults = UserDefaults.standard
+        return defaults.bool(forKey: notificationsEnabled)
+            || defaults.bool(forKey: resetReminderEnabled)
+            || defaults.bool(forKey: notifyOnReset)
+            || defaults.bool(forKey: statusAlertsEnabled)
     }
 
     static var refreshInterval: TimeInterval {
@@ -54,6 +87,7 @@ enum AppInfo {
     }
 
     static let claudeCodeDocsURL = URL(string: "https://docs.claude.com/en/docs/claude-code/setup")!
+    static let claudeUsageURL = URL(string: "https://claude.ai/settings/usage")!
 }
 
 enum LoginItem {

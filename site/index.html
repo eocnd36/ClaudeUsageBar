@@ -41,7 +41,7 @@
    "applicationSubCategory": "Menu bar utility",
    "operatingSystem": "macOS 13 or later",
    "processorRequirements": "Apple silicon or Intel",
-   "softwareVersion": "1.0.0",
+   "softwareVersion": "1.1.0",
    "fileSize": "0.8 MB",
    "downloadUrl": "https://github.com/eocnd36/ClaudeUsageBar/releases/latest/download/ClaudeUsageBar.zip",
    "installUrl": "https://github.com/eocnd36/ClaudeUsageBar/releases/latest/download/ClaudeUsageBar.zip",
@@ -75,9 +75,10 @@
    },
    "featureList": [
     "Claude session (5-hour) and weekly usage in the macOS menu bar",
-    "Reset countdown and pace marker",
-    "Notifications at 80% and 95% usage",
-    "Reminders before a limit resets",
+    "Reset countdown, pace marker and limit projection",
+    "Usage alerts at percentages you choose",
+    "Reminders before a limit resets and when it resets",
+    "Claude outage alerts from status.claude.com",
     "Usage breakdown by product (Claude Code, chat, Cowork)",
     "11 languages",
     "Read-only use of the Claude Code login"
@@ -87,6 +88,22 @@
    "@type": "FAQPage",
    "inLanguage": "ko",
    "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "알림 기준을 바꿀 수 있나요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "네. 설정에서 알림을 보낼 사용률(예: 85%, 90%)을 직접 추가하거나 지울 수 있고, 초기화 몇 분 전에 알릴지, 한도가 초기화되는 순간에도 알릴지 정할 수 있습니다."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Claude가 느리거나 안 될 때 장애인지 어떻게 알 수 있나요?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Claude Usage Bar는 Claude 공식 상태 페이지(status.claude.com)를 함께 확인해서, 장애가 있으면 팝오버에 배너를 띄우고 알림을 보냅니다. 내 쪽 문제인지 Claude 쪽 문제인지 바로 알 수 있어요."
+     }
+    },
     {
      "@type": "Question",
      "name": "Claude 사용량(사용 한도)은 어떻게 확인하나요?",
@@ -132,7 +149,7 @@
      "name": "안전한가요? 내 계정 정보는 어디로 가나요?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "로그인 토큰은 사용량을 불러올 때 Anthropic 서버(api.anthropic.com)에만 전송되고 다른 서버나 분석 도구는 쓰지 않습니다. Claude Code 로그인은 읽기만 하고 바꾸지 않으며, 소스 코드가 모두 GitHub에 공개되어 있습니다."
+      "text": "로그인 토큰은 사용량을 불러올 때 Anthropic 서버(api.anthropic.com)에만 전송됩니다. 그 밖에는 계정 정보 없이 공개 상태 페이지(status.claude.com)만 확인하고, 분석 도구는 쓰지 않습니다. Claude Code 로그인은 읽기만 하고 바꾸지 않으며, 소스 코드가 모두 GitHub에 공개되어 있습니다."
      }
     },
     {
@@ -149,6 +166,22 @@
    "@type": "FAQPage",
    "inLanguage": "en",
    "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Can I change when I get alerts?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. In Settings you can add or remove the usage percentages that trigger an alert (for example 85% and 90%), choose how many minutes before a reset to be reminded, and get notified the moment a limit resets."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How can I tell if Claude is down?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Claude Usage Bar also checks the official Claude status page (status.claude.com). When there's an incident, it shows a banner in the popover and sends a notification, so you know whether the problem is on your side or Claude's."
+     }
+    },
     {
      "@type": "Question",
      "name": "How do I check my Claude usage limits?",
@@ -194,7 +227,7 @@
      "name": "Is it safe? Where does my account data go?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Your login token is only sent to Anthropic (api.anthropic.com) to fetch usage. There are no other servers and no analytics. The app reads the Claude Code login without changing it, and all of the source code is public on GitHub."
+      "text": "Your login token is only sent to Anthropic (api.anthropic.com) to fetch usage. Apart from that, the app only checks the public status page (status.claude.com) without any account data, and there are no analytics. The app reads the Claude Code login without changing it, and all of the source code is public on GitHub."
      }
     },
     {
@@ -361,6 +394,7 @@ html[data-lang="en"] [data-l="ko"] { display: none !important; }
 .bar .fill { position: absolute; inset: 0 auto 0 0; border-radius: 99px; width: 0; }
 .bar .pace { position: absolute; top: -2px; width: 2px; height: 12px; border-radius: 1px; background: var(--ink); opacity: .55; }
 .limit-reset { color: var(--muted); font-size: 12.5px; }
+.limit-projection { color: var(--orange); font-size: 12.5px; margin-top: 3px; }
 .sep { height: 1px; background: var(--line); margin: 14px 0; }
 .split-title { color: var(--muted); font-size: 12.5px; font-weight: 600; margin-bottom: 8px; }
 .split { display: flex; gap: 2px; height: 6px; margin-bottom: 9px; }
@@ -442,6 +476,7 @@ code, .cmd {
 .banner .b-head small { color: var(--faint); font-size: 12px; white-space: nowrap; }
 .banner p { margin: 2px 0 0; color: var(--muted); max-width: none; }
 .banner + .banner { margin-top: 10px; opacity: .9; }
+.banner + .banner + .banner { opacity: .8; }
 
 .langs { font-size: clamp(20px, 2.4vw, 28px); line-height: 1.55; letter-spacing: -.01em; font-weight: 600; word-break: keep-all; }
 .langs { display: flex; flex-wrap: wrap; gap: 0 .9em; margin: 0; }
@@ -580,6 +615,7 @@ footer .grow { flex: 1; min-width: 240px; }
         </div>
         <div class="bar"><div class="fill" data-pct="91" style="background:var(--red)"></div><div class="pace" style="left:69%"></div></div>
         <div class="limit-reset"><span data-l="ko">(월) 오후 4:10 초기화 (2일 5시간 후)</span><span data-l="en">Resets Mon 4:10 PM (in 2d 5h)</span></div>
+        <div class="limit-projection"><span data-l="ko">이 속도면 (일) 오전 6:05에 한도 도달</span><span data-l="en">At this pace, you'll hit the limit at Sun 6:05 AM</span></div>
       </div>
 
       <div class="sep"></div>
@@ -648,9 +684,9 @@ footer .grow { flex: 1; min-width: 240px; }
 
     <div class="feature">
       <div>
-        <h3><span data-l="ko">한도에 닿기 전에, 초기화되기 전에</span><span data-l="en">Before you hit the limit, and before it resets</span></h3>
-        <p><span data-l="ko">사용량이 80%와 95%를 넘으면 알려 드리고, 한도가 초기화되기 5분에서 1시간 전에도 알림을 보내요. 초기화 알림은 50% 이상 쓴 한도에만 오기 때문에 귀찮게 하지 않습니다.</span>
-        <span data-l="en">Get a notification at 80% and 95%, plus a reminder 5 to 60 minutes before a limit resets. Reset reminders only fire for limits you've used at least half of, so they stay useful.</span></p>
+        <h3><span data-l="ko">알림은 원하는 대로</span><span data-l="en">Alerts on your terms</span></h3>
+        <p><span data-l="ko">몇 %에서 알릴지, 초기화 몇 분 전에 알릴지 직접 정하세요. 한도가 다시 채워지는 순간과 Claude에 장애가 생겼을 때도 알려 드리고, 지금 속도면 언제 한도에 닿는지 미리 계산해 보여 줍니다.</span>
+        <span data-l="en">Pick the percentages that trigger an alert and how many minutes before a reset you want a reminder. You can also get notified the moment a limit refills or when Claude has an outage, and see when you'll hit the limit at your current pace.</span></p>
       </div>
       <div aria-hidden="true">
         <div class="banner">
@@ -658,6 +694,13 @@ footer .grow { flex: 1; min-width: 240px; }
           <div style="flex:1">
             <div class="b-head"><b><span data-l="ko">현재 세션 15분 후 초기화</span><span data-l="en">Current session resets in 15m</span></b><small><span data-l="ko">지금</span><span data-l="en">now</span></small></div>
             <p><span data-l="ko">현재 87% 사용 중. 곧 사용량이 다시 채워집니다.</span><span data-l="en">Currently at 87%. Your usage will be available again soon.</span></p>
+          </div>
+        </div>
+        <div class="banner">
+          <img src="icon.png" alt="">
+          <div style="flex:1">
+            <div class="b-head"><b><span data-l="ko">Claude에 장애가 있어요</span><span data-l="en">Claude is having issues</span></b><small><span data-l="ko">1시간 전</span><span data-l="en">1h ago</span></small></div>
+            <p>Elevated errors on Claude Opus</p>
           </div>
         </div>
         <div class="banner">
@@ -686,7 +729,7 @@ footer .grow { flex: 1; min-width: 240px; }
     <div class="privacy">
       <div>
         <h3><span data-l="ko">Anthropic으로만 전송</span><span data-l="en">Sent only to Anthropic</span></h3>
-        <p><span data-l="ko">로그인 정보는 사용량을 불러올 때 api.anthropic.com에만 보냅니다. 다른 서버나 분석 도구는 쓰지 않아요.</span><span data-l="en">Your login is only sent to api.anthropic.com to fetch usage. There are no other servers and no analytics.</span></p>
+        <p><span data-l="ko">로그인 정보는 사용량을 불러올 때 api.anthropic.com에만 보냅니다. 그 밖에는 계정 정보 없이 공개 상태 페이지만 확인하고, 분석 도구는 쓰지 않아요.</span><span data-l="en">Your login is only sent to api.anthropic.com to fetch usage. Apart from that, the app only checks the public status page with no account data, and there are no analytics.</span></p>
       </div>
       <div>
         <h3><span data-l="ko">읽기만 합니다</span><span data-l="en">Read-only</span></h3>
@@ -701,21 +744,25 @@ footer .grow { flex: 1; min-width: 240px; }
   <section class="section" id="faq">
     <h2><span data-l="ko">자주 묻는 질문</span><span data-l="en">Questions and answers</span></h2>
     <div class="faq" data-l="ko">
+      <details><summary>알림 기준을 바꿀 수 있나요?</summary><p>네. 설정에서 알림을 보낼 사용률(예: 85%, 90%)을 직접 추가하거나 지울 수 있고, 초기화 몇 분 전에 알릴지, 한도가 초기화되는 순간에도 알릴지 정할 수 있습니다.</p></details>
+      <details><summary>Claude가 느리거나 안 될 때 장애인지 어떻게 알 수 있나요?</summary><p>Claude Usage Bar는 Claude 공식 상태 페이지(status.claude.com)를 함께 확인해서, 장애가 있으면 팝오버에 배너를 띄우고 알림을 보냅니다. 내 쪽 문제인지 Claude 쪽 문제인지 바로 알 수 있어요.</p></details>
       <details><summary>Claude 사용량(사용 한도)은 어떻게 확인하나요?</summary><p>Claude Code에서 /usage 명령을 실행하거나 claude.ai 설정의 사용량 화면에서 볼 수 있습니다. Claude Usage Bar를 설치하면 현재 세션과 주간 한도 사용률이 macOS 메뉴 막대에 늘 표시되어, 따로 확인하러 가지 않아도 됩니다.</p></details>
       <details><summary>Claude의 5시간 한도는 언제 초기화되나요?</summary><p>Claude 구독 플랜의 세션 한도는 5시간 단위로 초기화됩니다. Claude Usage Bar는 정확한 초기화 시각과 남은 시간을 보여 주고, 원하면 초기화 5분에서 60분 전에 알림을 보냅니다.</p></details>
       <details><summary>Claude 주간 한도는 무엇인가요?</summary><p>세션 한도와 별도로 7일 단위로 적용되는 사용 한도입니다. 플랜에 따라 모든 모델 공통 한도 외에 Opus나 Sonnet 전용 주간 한도가 따로 있을 수 있으며, Claude Usage Bar는 계정에 적용되는 주간 한도를 모두 표시합니다.</p></details>
       <details><summary>claude.ai 웹과 데스크톱 앱 사용량도 포함되나요?</summary><p>네. Claude 구독의 사용 한도는 claude.ai, Claude 데스크톱 앱, Claude Code가 함께 쓰기 때문에 Claude Usage Bar에 보이는 수치가 전체 사용량입니다. 이번 주 사용량이 어디서 나왔는지(Claude Code, 채팅, Cowork)도 비율로 보여 줍니다.</p></details>
       <details><summary>Claude Code 없이도 쓸 수 있나요?</summary><p>아니요. Claude Usage Bar는 Claude Code에 저장된 로그인을 사용하므로, Claude 구독(Pro, Max, Team) 계정으로 Claude Code에 한 번 로그인해 두어야 합니다.</p></details>
-      <details><summary>안전한가요? 내 계정 정보는 어디로 가나요?</summary><p>로그인 토큰은 사용량을 불러올 때 Anthropic 서버(api.anthropic.com)에만 전송되고 다른 서버나 분석 도구는 쓰지 않습니다. Claude Code 로그인은 읽기만 하고 바꾸지 않으며, 소스 코드가 모두 GitHub에 공개되어 있습니다.</p></details>
+      <details><summary>안전한가요? 내 계정 정보는 어디로 가나요?</summary><p>로그인 토큰은 사용량을 불러올 때 Anthropic 서버(api.anthropic.com)에만 전송됩니다. 그 밖에는 계정 정보 없이 공개 상태 페이지(status.claude.com)만 확인하고, 분석 도구는 쓰지 않습니다. Claude Code 로그인은 읽기만 하고 바꾸지 않으며, 소스 코드가 모두 GitHub에 공개되어 있습니다.</p></details>
       <details><summary>무료인가요? 어떤 Mac에서 쓸 수 있나요?</summary><p>무료 오픈소스(MIT 라이선스)입니다. macOS 13 Ventura 이상에서 동작하며 Apple Silicon과 Intel Mac을 모두 지원합니다.</p></details>
     </div>
     <div class="faq" data-l="en">
+      <details><summary>Can I change when I get alerts?</summary><p>Yes. In Settings you can add or remove the usage percentages that trigger an alert (for example 85% and 90%), choose how many minutes before a reset to be reminded, and get notified the moment a limit resets.</p></details>
+      <details><summary>How can I tell if Claude is down?</summary><p>Claude Usage Bar also checks the official Claude status page (status.claude.com). When there's an incident, it shows a banner in the popover and sends a notification, so you know whether the problem is on your side or Claude's.</p></details>
       <details><summary>How do I check my Claude usage limits?</summary><p>Run /usage in Claude Code, or open the usage page in claude.ai settings. With Claude Usage Bar installed, your current session and weekly limit usage stays visible in the macOS menu bar, so you never have to go looking.</p></details>
       <details><summary>When does Claude's 5-hour limit reset?</summary><p>Session limits on Claude subscription plans reset in 5-hour windows. Claude Usage Bar shows the exact reset time and the time remaining, and can remind you 5 to 60 minutes before the reset.</p></details>
       <details><summary>What is Claude's weekly limit?</summary><p>It's a usage limit applied over 7 days, separate from the session limit. Depending on your plan there may be a separate weekly limit for Opus or Sonnet in addition to the all-models limit. Claude Usage Bar shows every weekly limit that applies to your account.</p></details>
       <details><summary>Does it include usage from claude.ai and the desktop app?</summary><p>Yes. Claude subscription limits are shared across claude.ai, the Claude desktop app and Claude Code, so the numbers in Claude Usage Bar are your total usage. It also shows where this week's usage came from: Claude Code, chat or Cowork.</p></details>
       <details><summary>Can I use it without Claude Code?</summary><p>No. Claude Usage Bar uses the login saved by Claude Code, so you need to sign in to Claude Code once with a Claude Pro, Max or Team plan.</p></details>
-      <details><summary>Is it safe? Where does my account data go?</summary><p>Your login token is only sent to Anthropic (api.anthropic.com) to fetch usage. There are no other servers and no analytics. The app reads the Claude Code login without changing it, and all of the source code is public on GitHub.</p></details>
+      <details><summary>Is it safe? Where does my account data go?</summary><p>Your login token is only sent to Anthropic (api.anthropic.com) to fetch usage. Apart from that, the app only checks the public status page (status.claude.com) without any account data, and there are no analytics. The app reads the Claude Code login without changing it, and all of the source code is public on GitHub.</p></details>
       <details><summary>Is it free? Which Macs does it support?</summary><p>It's free and open source under the MIT License. It runs on macOS 13 Ventura or later, on both Apple silicon and Intel Macs.</p></details>
     </div>
   </section>
@@ -807,8 +854,8 @@ footer .grow { flex: 1; min-width: 240px; }
     });
   });
 
-  // Latest version from GitHub releases
-  fetch("https://api.github.com/repos/eocnd36/ClaudeUsageBar/releases/latest")
+  // Latest version from GitHub releases (skipped for static screenshots so images don't bake in a version)
+  if (!new URLSearchParams(location.search).has("static")) fetch("https://api.github.com/repos/eocnd36/ClaudeUsageBar/releases/latest")
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (release) {
       if (!release || !release.tag_name) return;

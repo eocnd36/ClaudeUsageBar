@@ -75,9 +75,27 @@
 "Claude Code setup guide" = "Claude Code 설치 안내";
 
 /* Reset reminders */
-"Reset reminder" = "초기화 알림";
-"Off" = "끔";
-"%lld min before" = "%lld분 전";
-"Only for limits at %@ or more" = "사용량 %@ 이상인 한도만";
 "%@ resets in %@" = "%1$@ %2$@ 후 초기화";
 "Currently at %@. Your usage will be available again soon." = "현재 %@ 사용 중. 곧 사용량이 다시 채워집니다.";
+
+/* Notification settings and status */
+"%@ has reset" = "%@ 초기화됨";
+"Your usage is available again." = "다시 사용할 수 있어요.";
+"Notifications" = "알림";
+"Remind before a limit resets" = "초기화 전에 알림";
+"min before" = "분 전";
+"Notify when a limit resets" = "초기화되면 알림";
+"Only for limits used at least" = "최소 사용량";
+"Alert me when Claude has an outage" = "Claude 장애 알림";
+"Add" = "추가";
+"Send test notification" = "테스트 알림 보내기";
+"Sent" = "보냄";
+"Test notification" = "테스트 알림";
+"Notifications from Claude Usage Bar are working." = "Claude Usage Bar 알림이 잘 작동해요.";
+"Notifications are turned off for this app." = "이 앱의 알림이 꺼져 있어요.";
+"Open Notification Settings" = "알림 설정 열기";
+"Claude is having issues" = "Claude에 장애가 있어요";
+"View status" = "상태 보기";
+"At this pace, you'll hit the limit at %@" = "이 속도면 %@에 한도 도달";
+"Estimated from how fast you've used this limit so far." = "지금까지 이 한도를 쓴 속도로 계산한 예상이에요.";
+"Open usage on claude.ai" = "claude.ai에서 사용량 보기";

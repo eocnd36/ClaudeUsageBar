@@ -9,11 +9,17 @@ struct SettingsView: View {
 
     @AppStorage(AppSettings.menuBarStyle) private var styleRaw = MenuBarStyle.sessionAndWeekly.rawValue
     @AppStorage(AppSettings.refreshMinutes) private var refreshMinutes = 5
-    @AppStorage(AppSettings.notificationsEnabled) private var notificationsEnabled = true
+    @AppStorage(AppSettings.notificationsEnabled) private var usageAlertsEnabled = true
+    @AppStorage(AppSettings.alertThresholdsKey) private var thresholdsRaw = "80,95"
+    @AppStorage(AppSettings.resetReminderEnabled) private var resetReminderEnabled = true
     @AppStorage(AppSettings.resetReminderMinutes) private var resetReminderMinutes = 15
+    @AppStorage(AppSettings.notifyOnReset) private var notifyOnReset = false
+    @AppStorage(AppSettings.resetReminderMinimumPercent) private var minimumPercent = 50
+    @AppStorage(AppSettings.statusAlertsEnabled) private var statusAlertsEnabled = true
     @State private var launchAtLogin = LoginItem.isEnabled
     @State private var loginItemError: String?
     @State private var language = AppLanguage.override ?? ""
+    @State private var testSent = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -45,20 +51,6 @@ struct SettingsView: View {
                         }
                     }
                 }
-                row("Reset reminder") {
-                    Picker("", selection: $resetReminderMinutes) {
-                        Text("Off").tag(0)
-                        ForEach(AppSettings.resetReminderOptions.filter { $0 > 0 }, id: \.self) { minutes in
-                            Text("\(minutes) min before").tag(minutes)
-                        }
-                    }
-                }
-                if resetReminderMinutes > 0 {
-                    Text("Only for limits at \(reminderThreshold) or more")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                }
                 row("Language") {
                     Picker("", selection: $language) {
                         Text("System default").tag("")
@@ -74,23 +66,20 @@ struct SettingsView: View {
 
             Divider()
 
-            VStack(alignment: .leading, spacing: 8) {
-                Toggle(isOn: $notificationsEnabled) {
-                    HStack(spacing: 4) {
-                        Text("Usage alerts")
-                        Text(verbatim: AppSettings.alertThresholds.map { "\($0)%" }.joined(separator: " · "))
-                            .foregroundStyle(.secondary)
-                    }
-                }
+            notificationSection
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 6) {
                 Toggle("Launch at login", isOn: $launchAtLogin)
+                    .toggleStyle(.switch)
+                    .controlSize(.small)
                 if let loginItemError {
                     Text(loginItemError)
                         .font(.caption)
                         .foregroundStyle(.red)
                 }
             }
-            .toggleStyle(.switch)
-            .controlSize(.small)
 
             Divider()
 
@@ -109,19 +98,19 @@ struct SettingsView: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(16)
+        .task { await store.refreshNotificationPermission() }
         .onChange(of: language) { code in
             AppLanguage.set(code.isEmpty ? nil : code)
         }
         .onChange(of: refreshMinutes) { _ in
             store.startPolling()
         }
-        .onChange(of: resetReminderMinutes) { minutes in
-            if minutes > 0 { Notifier.requestAuthorization() }
-            store.scheduleResetReminders()
-        }
-        .onChange(of: notificationsEnabled) { enabled in
-            if enabled { Notifier.requestAuthorization() }
-        }
+        .onChange(of: resetReminderEnabled) { _ in notificationSettingsChanged() }
+        .onChange(of: resetReminderMinutes) { _ in notificationSettingsChanged() }
+        .onChange(of: notifyOnReset) { _ in notificationSettingsChanged() }
+        .onChange(of: minimumPercent) { _ in notificationSettingsChanged() }
+        .onChange(of: usageAlertsEnabled) { _ in notificationSettingsChanged() }
+        .onChange(of: statusAlertsEnabled) { _ in notificationSettingsChanged() }
         .onChange(of: launchAtLogin) { enabled in
             guard enabled != LoginItem.isEnabled else { return }
             do {
@@ -134,8 +123,78 @@ struct SettingsView: View {
         }
     }
 
-    private var reminderThreshold: String {
-        MenuBarFormatter.percentText(Double(AppSettings.resetReminderMinimumPercent))
+    // MARK: - Notifications
+
+    private var notificationSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Notifications")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            if store.notificationsDenied {
+                PermissionWarning()
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
+                Toggle("Usage alerts", isOn: $usageAlertsEnabled)
+                if usageAlertsEnabled {
+                    ThresholdEditor(raw: $thresholdsRaw)
+                        .padding(.leading, 2)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
+                Toggle("Remind before a limit resets", isOn: $resetReminderEnabled)
+                if resetReminderEnabled {
+                    HStack(spacing: 6) {
+                        NumberField(value: $resetReminderMinutes, range: AppSettings.resetReminderMinutesRange)
+                        Text("min before")
+                            .foregroundStyle(.secondary)
+                    }
+                    .font(.callout)
+                }
+            }
+
+            Toggle("Notify when a limit resets", isOn: $notifyOnReset)
+
+            if resetReminderEnabled || notifyOnReset {
+                HStack(spacing: 6) {
+                    Text("Only for limits used at least")
+                        .foregroundStyle(.secondary)
+                    NumberField(value: $minimumPercent, range: AppSettings.minimumPercentRange)
+                    Text(verbatim: "%")
+                        .foregroundStyle(.secondary)
+                }
+                .font(.callout)
+            }
+
+            Toggle("Alert me when Claude has an outage", isOn: $statusAlertsEnabled)
+
+            Button {
+                Notifier.requestAuthorization()
+                Notifier.post(
+                    title: String(localized: "Test notification"),
+                    body: String(localized: "Notifications from Claude Usage Bar are working.")
+                )
+                testSent = true
+                Task {
+                    try? await Task.sleep(nanoseconds: 1_500_000_000)
+                    await store.refreshNotificationPermission()
+                    testSent = false
+                }
+            } label: {
+                Label(testSent ? String(localized: "Sent") : String(localized: "Send test notification"), systemImage: "bell")
+            }
+            .controlSize(.small)
+        }
+        .toggleStyle(.switch)
+        .controlSize(.small)
+    }
+
+    private func notificationSettingsChanged() {
+        if AppSettings.wantsNotifications { Notifier.requestAuthorization() }
+        store.scheduleResetReminders()
+        Task { await store.refreshNotificationPermission() }
     }
 
     private func row<Content: View>(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {
@@ -143,6 +202,97 @@ struct SettingsView: View {
             Text(title)
             Spacer()
             content().fixedSize()
+        }
+    }
+}
+
+/// 알림이 꺼져 있을 때 시스템 설정으로 안내합니다.
+private struct PermissionWarning: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Label("Notifications are turned off for this app.", systemImage: "bell.slash")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.orange)
+            Button("Open Notification Settings") {
+                Notifier.openSystemSettings()
+            }
+            .controlSize(.small)
+        }
+        .padding(8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 8).fill(Color.orange.opacity(0.1)))
+    }
+}
+
+/// 사용량 알림 기준(%)을 직접 추가하고 지우는 편집기
+private struct ThresholdEditor: View {
+    @Binding var raw: String
+    @State private var draft = ""
+    @State private var invalid = false
+
+    private var values: [Int] { AppSettings.parseThresholds(raw) }
+
+    var body: some View {
+        HStack(spacing: 6) {
+            ForEach(values, id: \.self) { value in
+                HStack(spacing: 3) {
+                    Text(verbatim: "\(value)%").monospacedDigit()
+                    Button {
+                        raw = AppSettings.formatThresholds(values.filter { $0 != value })
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 8, weight: .bold))
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.secondary)
+                }
+                .font(.callout)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(Capsule().fill(Color.primary.opacity(0.08)))
+            }
+            if values.count < AppSettings.maxAlertThresholds {
+                TextField(text: $draft, prompt: Text(verbatim: "%")) { EmptyView() }
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 44)
+                    .onSubmit(add)
+                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.red, lineWidth: invalid ? 1 : 0))
+                Button("Add", action: add)
+                    .controlSize(.small)
+                    .disabled(draft.isEmpty)
+            }
+        }
+    }
+
+    private func add() {
+        let trimmed = draft.trimmingCharacters(in: CharacterSet(charactersIn: " %"))
+        guard let value = Int(trimmed), (1...100).contains(value) else {
+            invalid = true
+            return
+        }
+        raw = AppSettings.formatThresholds(values + [value])
+        draft = ""
+        invalid = false
+    }
+}
+
+/// 직접 입력하거나 화살표로 조절하는 숫자 칸. 범위를 벗어나면 가장 가까운 값으로 맞춥니다.
+private struct NumberField: View {
+    @Binding var value: Int
+    let range: ClosedRange<Int>
+
+    var body: some View {
+        HStack(spacing: 2) {
+            TextField("", value: $value, format: .number)
+                .textFieldStyle(.roundedBorder)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 48)
+            Stepper("", value: $value, in: range)
+                .labelsHidden()
+        }
+        .onChange(of: value) { newValue in
+            let clamped = min(max(newValue, range.lowerBound), range.upperBound)
+            if clamped != newValue { value = clamped }
         }
     }
 }

@@ -75,9 +75,27 @@
 "Claude Code setup guide" = "Руководство по установке Claude Code";
 
 /* Reset reminders */
-"Reset reminder" = "Напоминание о сбросе";
-"Off" = "Выкл.";
-"%lld min before" = "За %lld мин";
-"Only for limits at %@ or more" = "Только для лимитов от %@";
 "%@ resets in %@" = "%1$@: сброс через %2$@";
 "Currently at %@. Your usage will be available again soon." = "Сейчас использовано %@. Скоро лимит восстановится.";
+
+/* Notification settings and status */
+"%@ has reset" = "%@: лимит сброшен";
+"Your usage is available again." = "Можно снова пользоваться Claude.";
+"Notifications" = "Уведомления";
+"Remind before a limit resets" = "Напоминать перед сбросом";
+"min before" = "мин до сброса";
+"Notify when a limit resets" = "Уведомлять о сбросе лимита";
+"Only for limits used at least" = "Только для лимитов от";
+"Alert me when Claude has an outage" = "Уведомлять о сбоях Claude";
+"Add" = "Добавить";
+"Send test notification" = "Отправить тестовое уведомление";
+"Sent" = "Отправлено";
+"Test notification" = "Тестовое уведомление";
+"Notifications from Claude Usage Bar are working." = "Уведомления Claude Usage Bar работают.";
+"Notifications are turned off for this app." = "Уведомления для этого приложения отключены.";
+"Open Notification Settings" = "Открыть настройки уведомлений";
+"Claude is having issues" = "У Claude неполадки";
+"View status" = "Статус";
+"At this pace, you'll hit the limit at %@" = "В таком темпе лимит закончится в %@";
+"Estimated from how fast you've used this limit so far." = "Оценка по тому, как быстро вы расходовали этот лимит.";
+"Open usage on claude.ai" = "Открыть использование на claude.ai";
