@@ -1,0 +1,83 @@
+/* Keys are the English strings in code. Run scripts/check-localizations.py after editing. */
+
+/* Popover */
+"Claude Usage" = "Использование Claude";
+"Claude usage" = "Использование Claude";
+"Refresh" = "Обновить";
+"Settings" = "Настройки";
+"Quit" = "Выйти";
+"Extra usage" = "Дополнительное использование";
+"Time elapsed in this window" = "Прошедшее время в этом периоде";
+"This week by product" = "На этой неделе по продуктам";
+
+/* Limits */
+"Current session" = "Текущая сессия";
+"Weekly · All models" = "За неделю · Все модели";
+"Weekly · Opus" = "За неделю · Opus";
+"Weekly · Sonnet" = "За неделю · Sonnet";
+"Weekly · Cowork" = "За неделю · Cowork";
+"5-hour window" = "Окно 5 часов";
+"7-day window" = "Окно 7 дней";
+
+/* Time */
+"Resetting now" = "Скоро сброс";
+"Resets in %@" = "Сброс через %@";
+"Resets %@ (in %@)" = "Сброс %1$@ (через %2$@)";
+"Updated just now" = "Только что обновлено";
+"Updated %@ ago" = "Обновлено %@ назад";
+
+/* Notifications */
+"%@ reached %@" = "%1$@: достигнуто %2$@";
+
+/* Connect */
+"Connect your Claude account" = "Подключите аккаунт Claude";
+"See the usage of the Claude account you're signed in to with Claude Code. Your login stays on this Mac and is only sent to Anthropic." = "Показывает использование аккаунта Claude, в который вы вошли в Claude Code. Данные входа остаются на этом Mac и отправляются только в Anthropic.";
+"Claude Code login found" = "Вход в Claude Code найден";
+"No Claude Code login found" = "Вход в Claude Code не найден";
+"Install Claude Code and run `claude` in Terminal to sign in, then check again." = "Установите Claude Code и выполните `claude` в Терминале, чтобы войти, затем проверьте снова.";
+"Check again" = "Проверить снова";
+"Connect" = "Подключить";
+
+/* Account */
+"Account" = "Аккаунт";
+"Connected" = "Подключено";
+"Not connected" = "Не подключено";
+"Disconnect" = "Отключить (выйти)";
+"Removes this account's data from the app. Your Claude Code login is not affected." = "Удаляет данные этого аккаунта из приложения. Вход в Claude Code не затрагивается.";
+
+/* Settings */
+"Menu bar" = "Строка меню";
+"Refresh every" = "Обновлять каждые";
+"%lld min" = "%lld мин";
+"Language" = "Язык";
+"System default" = "Как в системе";
+"Usage alerts" = "Уведомления об использовании";
+"Launch at login" = "Открывать при входе";
+"Version %@" = "Версия %@";
+"Unofficial app. Not affiliated with Anthropic." = "Неофициальное приложение. Не связано с Anthropic.";
+"Session + weekly" = "Сессия + неделя";
+"Session only" = "Только сессия";
+"Session + reset time" = "Сессия + время до сброса";
+"Icon only" = "Только значок";
+
+/* Errors */
+"Claude Code login not found" = "Вход в Claude Code не найден";
+"Login expired" = "Срок входа истёк";
+"Too many requests" = "Слишком много запросов";
+"Can't reach Claude" = "Не удаётся подключиться к Claude";
+"Server error (%lld)" = "Ошибка сервера (%lld)";
+"Unexpected response" = "Неожиданный ответ";
+"This app uses the login saved by Claude Code. Install Claude Code and run `claude` in Terminal to sign in." = "Это приложение использует вход, сохранённый Claude Code. Установите Claude Code и выполните `claude` в Терминале, чтобы войти.";
+"Run `claude` in Terminal once — Claude Code will refresh the login automatically." = "Выполните `claude` в Терминале один раз — Claude Code автоматически обновит вход.";
+"Will retry automatically in a few minutes." = "Повторная попытка через несколько минут.";
+"Will retry automatically." = "Повторная попытка будет выполнена автоматически.";
+"The usage format may have changed. Check for an app update." = "Возможно, формат данных изменился. Проверьте обновления приложения.";
+"Claude Code setup guide" = "Руководство по установке Claude Code";
+
+/* Reset reminders */
+"Reset reminder" = "Напоминание о сбросе";
+"Off" = "Выкл.";
+"%lld min before" = "За %lld мин";
+"Only for limits at %@ or more" = "Только для лимитов от %@";
+"%@ resets in %@" = "%1$@: сброс через %2$@";
+"Currently at %@. Your usage will be available again soon." = "Сейчас использовано %@. Скоро лимит восстановится.";

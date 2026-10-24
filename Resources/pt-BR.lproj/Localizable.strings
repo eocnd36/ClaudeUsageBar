@@ -1,0 +1,83 @@
+/* Keys are the English strings in code. Run scripts/check-localizations.py after editing. */
+
+/* Popover */
+"Claude Usage" = "Uso do Claude";
+"Claude usage" = "Uso do Claude";
+"Refresh" = "Atualizar";
+"Settings" = "Ajustes";
+"Quit" = "Sair";
+"Extra usage" = "Uso extra";
+"Time elapsed in this window" = "Tempo decorrido neste período";
+"This week by product" = "Esta semana por produto";
+
+/* Limits */
+"Current session" = "Sessão atual";
+"Weekly · All models" = "Semanal · Todos os modelos";
+"Weekly · Opus" = "Semanal · Opus";
+"Weekly · Sonnet" = "Semanal · Sonnet";
+"Weekly · Cowork" = "Semanal · Cowork";
+"5-hour window" = "Período de 5 horas";
+"7-day window" = "Período de 7 dias";
+
+/* Time */
+"Resetting now" = "Redefinindo agora";
+"Resets in %@" = "Redefine em %@";
+"Resets %@ (in %@)" = "Redefine %1$@ (em %2$@)";
+"Updated just now" = "Atualizado agora";
+"Updated %@ ago" = "Atualizado há %@";
+
+/* Notifications */
+"%@ reached %@" = "%1$@ atingiu %2$@";
+
+/* Connect */
+"Connect your Claude account" = "Conecte sua conta do Claude";
+"See the usage of the Claude account you're signed in to with Claude Code. Your login stays on this Mac and is only sent to Anthropic." = "Mostra o uso da conta do Claude conectada ao Claude Code. Seu login fica neste Mac e só é enviado à Anthropic.";
+"Claude Code login found" = "Login do Claude Code encontrado";
+"No Claude Code login found" = "Nenhum login do Claude Code encontrado";
+"Install Claude Code and run `claude` in Terminal to sign in, then check again." = "Instale o Claude Code e execute `claude` no Terminal para entrar; depois verifique novamente.";
+"Check again" = "Verificar novamente";
+"Connect" = "Conectar";
+
+/* Account */
+"Account" = "Conta";
+"Connected" = "Conectado";
+"Not connected" = "Não conectado";
+"Disconnect" = "Desconectar (sair)";
+"Removes this account's data from the app. Your Claude Code login is not affected." = "Remove os dados desta conta do app. Seu login no Claude Code não é afetado.";
+
+/* Settings */
+"Menu bar" = "Barra de menus";
+"Refresh every" = "Atualizar a cada";
+"%lld min" = "%lld min";
+"Language" = "Idioma";
+"System default" = "Padrão do sistema";
+"Usage alerts" = "Alertas de uso";
+"Launch at login" = "Abrir ao iniciar sessão";
+"Version %@" = "Versão %@";
+"Unofficial app. Not affiliated with Anthropic." = "App não oficial. Sem relação com a Anthropic.";
+"Session + weekly" = "Sessão + semanal";
+"Session only" = "Somente sessão";
+"Session + reset time" = "Sessão + tempo até redefinir";
+"Icon only" = "Somente ícone";
+
+/* Errors */
+"Claude Code login not found" = "Login do Claude Code não encontrado";
+"Login expired" = "Login expirado";
+"Too many requests" = "Solicitações demais";
+"Can't reach Claude" = "Não foi possível acessar o Claude";
+"Server error (%lld)" = "Erro do servidor (%lld)";
+"Unexpected response" = "Resposta inesperada";
+"This app uses the login saved by Claude Code. Install Claude Code and run `claude` in Terminal to sign in." = "Este app usa o login salvo pelo Claude Code. Instale o Claude Code e execute `claude` no Terminal para entrar.";
+"Run `claude` in Terminal once — Claude Code will refresh the login automatically." = "Execute `claude` uma vez no Terminal — o Claude Code renovará o login automaticamente.";
+"Will retry automatically in a few minutes." = "Nova tentativa automática em alguns minutos.";
+"Will retry automatically." = "Nova tentativa automática.";
+"The usage format may have changed. Check for an app update." = "O formato dos dados de uso pode ter mudado. Verifique se há uma atualização do app.";
+"Claude Code setup guide" = "Guia de instalação do Claude Code";
+
+/* Reset reminders */
+"Reset reminder" = "Lembrete de redefinição";
+"Off" = "Desativado";
+"%lld min before" = "%lld min antes";
+"Only for limits at %@ or more" = "Somente para limites em %@ ou mais";
+"%@ resets in %@" = "%1$@ será redefinido em %2$@";
+"Currently at %@. Your usage will be available again soon." = "Uso atual: %@. Seu uso estará disponível novamente em breve.";

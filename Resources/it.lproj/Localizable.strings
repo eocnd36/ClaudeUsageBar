@@ -1,0 +1,83 @@
+/* Keys are the English strings in code. Run scripts/check-localizations.py after editing. */
+
+/* Popover */
+"Claude Usage" = "Utilizzo di Claude";
+"Claude usage" = "Utilizzo di Claude";
+"Refresh" = "Aggiorna";
+"Settings" = "Impostazioni";
+"Quit" = "Esci";
+"Extra usage" = "Utilizzo extra";
+"Time elapsed in this window" = "Tempo trascorso in questo periodo";
+"This week by product" = "Questa settimana per prodotto";
+
+/* Limits */
+"Current session" = "Sessione attuale";
+"Weekly · All models" = "Settimanale · Tutti i modelli";
+"Weekly · Opus" = "Settimanale · Opus";
+"Weekly · Sonnet" = "Settimanale · Sonnet";
+"Weekly · Cowork" = "Settimanale · Cowork";
+"5-hour window" = "Periodo di 5 ore";
+"7-day window" = "Periodo di 7 giorni";
+
+/* Time */
+"Resetting now" = "Ripristino imminente";
+"Resets in %@" = "Ripristino tra %@";
+"Resets %@ (in %@)" = "Ripristino %1$@ (tra %2$@)";
+"Updated just now" = "Aggiornato ora";
+"Updated %@ ago" = "Aggiornato %@ fa";
+
+/* Notifications */
+"%@ reached %@" = "%1$@ ha raggiunto il %2$@";
+
+/* Connect */
+"Connect your Claude account" = "Collega il tuo account Claude";
+"See the usage of the Claude account you're signed in to with Claude Code. Your login stays on this Mac and is only sent to Anthropic." = "Mostra l’utilizzo dell’account Claude con cui hai effettuato l’accesso in Claude Code. Le credenziali restano su questo Mac e vengono inviate solo ad Anthropic.";
+"Claude Code login found" = "Accesso a Claude Code trovato";
+"No Claude Code login found" = "Nessun accesso a Claude Code trovato";
+"Install Claude Code and run `claude` in Terminal to sign in, then check again." = "Installa Claude Code ed esegui `claude` nel Terminale per accedere, poi controlla di nuovo.";
+"Check again" = "Controlla di nuovo";
+"Connect" = "Collega";
+
+/* Account */
+"Account" = "Account";
+"Connected" = "Collegato";
+"Not connected" = "Non collegato";
+"Disconnect" = "Scollega (esci)";
+"Removes this account's data from the app. Your Claude Code login is not affected." = "Rimuove i dati di questo account dall’app. Il tuo accesso a Claude Code non viene modificato.";
+
+/* Settings */
+"Menu bar" = "Barra dei menu";
+"Refresh every" = "Aggiorna ogni";
+"%lld min" = "%lld min";
+"Language" = "Lingua";
+"System default" = "Predefinita di sistema";
+"Usage alerts" = "Avvisi di utilizzo";
+"Launch at login" = "Apri al login";
+"Version %@" = "Versione %@";
+"Unofficial app. Not affiliated with Anthropic." = "App non ufficiale. Non affiliata ad Anthropic.";
+"Session + weekly" = "Sessione + settimanale";
+"Session only" = "Solo sessione";
+"Session + reset time" = "Sessione + tempo al ripristino";
+"Icon only" = "Solo icona";
+
+/* Errors */
+"Claude Code login not found" = "Accesso a Claude Code non trovato";
+"Login expired" = "Accesso scaduto";
+"Too many requests" = "Troppe richieste";
+"Can't reach Claude" = "Impossibile raggiungere Claude";
+"Server error (%lld)" = "Errore del server (%lld)";
+"Unexpected response" = "Risposta inattesa";
+"This app uses the login saved by Claude Code. Install Claude Code and run `claude` in Terminal to sign in." = "Questa app usa l’accesso salvato da Claude Code. Installa Claude Code ed esegui `claude` nel Terminale per accedere.";
+"Run `claude` in Terminal once — Claude Code will refresh the login automatically." = "Esegui `claude` una volta nel Terminale: Claude Code rinnoverà l’accesso automaticamente.";
+"Will retry automatically in a few minutes." = "Nuovo tentativo automatico tra qualche minuto.";
+"Will retry automatically." = "Nuovo tentativo automatico.";
+"The usage format may have changed. Check for an app update." = "Il formato dei dati di utilizzo potrebbe essere cambiato. Controlla gli aggiornamenti dell’app.";
+"Claude Code setup guide" = "Guida all’installazione di Claude Code";
+
+/* Reset reminders */
+"Reset reminder" = "Promemoria ripristino";
+"Off" = "Disattivato";
+"%lld min before" = "%lld min prima";
+"Only for limits at %@ or more" = "Solo per limiti al %@ o più";
+"%@ resets in %@" = "%1$@ si ripristina tra %2$@";
+"Currently at %@. Your usage will be available again soon." = "Utilizzo attuale: %@. A breve l’utilizzo sarà di nuovo disponibile.";

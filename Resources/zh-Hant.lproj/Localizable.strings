@@ -1,0 +1,83 @@
+/* Keys are the English strings in code. Run scripts/check-localizations.py after editing. */
+
+/* Popover */
+"Claude Usage" = "Claude 用量";
+"Claude usage" = "Claude 用量";
+"Refresh" = "重新整理";
+"Settings" = "設定";
+"Quit" = "結束";
+"Extra usage" = "額外用量";
+"Time elapsed in this window" = "本週期已經過的時間";
+"This week by product" = "本週用量分布";
+
+/* Limits */
+"Current session" = "目前工作階段";
+"Weekly · All models" = "每週 · 所有模型";
+"Weekly · Opus" = "每週 · Opus";
+"Weekly · Sonnet" = "每週 · Sonnet";
+"Weekly · Cowork" = "每週 · Cowork";
+"5-hour window" = "5 小時週期";
+"7-day window" = "7 天週期";
+
+/* Time */
+"Resetting now" = "即將重設";
+"Resets in %@" = "%@後重設";
+"Resets %@ (in %@)" = "%1$@重設（%2$@後）";
+"Updated just now" = "剛剛更新";
+"Updated %@ ago" = "%@前更新";
+
+/* Notifications */
+"%@ reached %@" = "%1$@已達 %2$@";
+
+/* Connect */
+"Connect your Claude account" = "連結你的 Claude 帳號";
+"See the usage of the Claude account you're signed in to with Claude Code. Your login stays on this Mac and is only sent to Anthropic." = "顯示你在 Claude Code 中登入的 Claude 帳號用量。登入資訊保留在這台 Mac 上，只會傳送給 Anthropic。";
+"Claude Code login found" = "已找到 Claude Code 登入資訊";
+"No Claude Code login found" = "找不到 Claude Code 登入資訊";
+"Install Claude Code and run `claude` in Terminal to sign in, then check again." = "請安裝 Claude Code，在終端機中執行 `claude` 登入，然後再檢查一次。";
+"Check again" = "再檢查一次";
+"Connect" = "連結";
+
+/* Account */
+"Account" = "帳號";
+"Connected" = "已連結";
+"Not connected" = "未連結";
+"Disconnect" = "解除連結（登出）";
+"Removes this account's data from the app. Your Claude Code login is not affected." = "從 App 中移除此帳號的資料。不會影響你的 Claude Code 登入。";
+
+/* Settings */
+"Menu bar" = "選單列";
+"Refresh every" = "重新整理間隔";
+"%lld min" = "%lld 分鐘";
+"Language" = "語言";
+"System default" = "依照系統";
+"Usage alerts" = "用量提醒";
+"Launch at login" = "登入時開啟";
+"Version %@" = "版本 %@";
+"Unofficial app. Not affiliated with Anthropic." = "非官方 App，與 Anthropic 無關。";
+"Session + weekly" = "工作階段 + 每週";
+"Session only" = "僅工作階段";
+"Session + reset time" = "工作階段 + 距重設時間";
+"Icon only" = "僅圖像";
+
+/* Errors */
+"Claude Code login not found" = "找不到 Claude Code 登入資訊";
+"Login expired" = "登入已過期";
+"Too many requests" = "要求過多";
+"Can't reach Claude" = "無法連線至 Claude";
+"Server error (%lld)" = "伺服器錯誤 (%lld)";
+"Unexpected response" = "非預期的回應";
+"This app uses the login saved by Claude Code. Install Claude Code and run `claude` in Terminal to sign in." = "此 App 使用 Claude Code 儲存的登入資訊。請安裝 Claude Code 並在終端機中執行 `claude` 登入。";
+"Run `claude` in Terminal once — Claude Code will refresh the login automatically." = "在終端機中執行一次 `claude`，Claude Code 會自動更新登入。";
+"Will retry automatically in a few minutes." = "將在幾分鐘後自動重試。";
+"Will retry automatically." = "將自動重試。";
+"The usage format may have changed. Check for an app update." = "用量資料格式可能已變更。請檢查 App 更新。";
+"Claude Code setup guide" = "Claude Code 安裝指南";
+
+/* Reset reminders */
+"Reset reminder" = "重設提醒";
+"Off" = "關閉";
+"%lld min before" = "提前 %lld 分鐘";
+"Only for limits at %@ or more" = "僅限用量達 %@ 以上";
+"%@ resets in %@" = "%1$@將在%2$@後重設";
+"Currently at %@. Your usage will be available again soon." = "目前已用 %@。用量即將恢復。";

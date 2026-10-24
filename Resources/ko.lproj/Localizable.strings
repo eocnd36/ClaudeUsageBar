@@ -1,0 +1,83 @@
+/* Keys are the English strings in code. Run scripts/check-localizations.py after editing. */
+
+/* Popover */
+"Claude Usage" = "Claude 사용량";
+"Claude usage" = "Claude 사용량";
+"Refresh" = "새로고침";
+"Settings" = "설정";
+"Quit" = "종료";
+"Extra usage" = "추가 사용량";
+"Time elapsed in this window" = "이번 기간에서 지난 시간";
+"This week by product" = "이번 주 사용처";
+
+/* Limits */
+"Current session" = "현재 세션";
+"Weekly · All models" = "주간 · 모든 모델";
+"Weekly · Opus" = "주간 · Opus";
+"Weekly · Sonnet" = "주간 · Sonnet";
+"Weekly · Cowork" = "주간 · Cowork";
+"5-hour window" = "5시간 단위";
+"7-day window" = "7일 단위";
+
+/* Time */
+"Resetting now" = "곧 초기화";
+"Resets in %@" = "%@ 후 초기화";
+"Resets %@ (in %@)" = "%1$@ 초기화 (%2$@ 후)";
+"Updated just now" = "방금 업데이트됨";
+"Updated %@ ago" = "%@ 전 업데이트";
+
+/* Notifications */
+"%@ reached %@" = "%1$@ 사용량 %2$@ 도달";
+
+/* Connect */
+"Connect your Claude account" = "Claude 계정 연결";
+"See the usage of the Claude account you're signed in to with Claude Code. Your login stays on this Mac and is only sent to Anthropic." = "Claude Code에 로그인된 Claude 계정의 사용량을 보여 줍니다. 로그인 정보는 이 Mac에만 머물며 Anthropic 외에는 전송되지 않습니다.";
+"Claude Code login found" = "Claude Code 로그인 확인됨";
+"No Claude Code login found" = "Claude Code 로그인 정보가 없어요";
+"Install Claude Code and run `claude` in Terminal to sign in, then check again." = "Claude Code를 설치하고 터미널에서 `claude`를 실행해 로그인한 뒤 다시 확인하세요.";
+"Check again" = "다시 확인";
+"Connect" = "연결";
+
+/* Account */
+"Account" = "계정";
+"Connected" = "연결됨";
+"Not connected" = "연결되지 않음";
+"Disconnect" = "연결 해제(로그아웃)";
+"Removes this account's data from the app. Your Claude Code login is not affected." = "이 계정의 데이터를 앱에서 지웁니다. Claude Code 로그인에는 영향을 주지 않습니다.";
+
+/* Settings */
+"Menu bar" = "메뉴 막대";
+"Refresh every" = "새로고침 간격";
+"%lld min" = "%lld분";
+"Language" = "언어";
+"System default" = "시스템 설정";
+"Usage alerts" = "사용량 알림";
+"Launch at login" = "로그인 시 자동 실행";
+"Version %@" = "버전 %@";
+"Unofficial app. Not affiliated with Anthropic." = "비공식 앱이며 Anthropic과 관련이 없습니다.";
+"Session + weekly" = "세션 + 주간";
+"Session only" = "세션만";
+"Session + reset time" = "세션 + 초기화까지 남은 시간";
+"Icon only" = "아이콘만";
+
+/* Errors */
+"Claude Code login not found" = "Claude Code 로그인 정보가 없어요";
+"Login expired" = "로그인이 만료됐어요";
+"Too many requests" = "요청이 너무 많아요";
+"Can't reach Claude" = "Claude에 연결할 수 없어요";
+"Server error (%lld)" = "서버 오류 (%lld)";
+"Unexpected response" = "예상하지 못한 응답";
+"This app uses the login saved by Claude Code. Install Claude Code and run `claude` in Terminal to sign in." = "이 앱은 Claude Code의 로그인 정보를 사용합니다. Claude Code를 설치하고 터미널에서 `claude`를 실행해 로그인하세요.";
+"Run `claude` in Terminal once — Claude Code will refresh the login automatically." = "터미널에서 `claude`를 한 번 실행하면 Claude Code가 로그인을 자동으로 갱신합니다.";
+"Will retry automatically in a few minutes." = "몇 분 뒤 자동으로 다시 시도합니다.";
+"Will retry automatically." = "자동으로 다시 시도합니다.";
+"The usage format may have changed. Check for an app update." = "사용량 데이터 형식이 바뀌었을 수 있어요. 앱 업데이트를 확인하세요.";
+"Claude Code setup guide" = "Claude Code 설치 안내";
+
+/* Reset reminders */
+"Reset reminder" = "초기화 알림";
+"Off" = "끔";
+"%lld min before" = "%lld분 전";
+"Only for limits at %@ or more" = "사용량 %@ 이상인 한도만";
+"%@ resets in %@" = "%1$@ %2$@ 후 초기화";
+"Currently at %@. Your usage will be available again soon." = "현재 %@ 사용 중. 곧 사용량이 다시 채워집니다.";
