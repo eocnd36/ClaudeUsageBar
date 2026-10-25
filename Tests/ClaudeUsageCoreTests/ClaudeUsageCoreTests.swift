@@ -302,11 +302,25 @@ private func decodeSample() throws -> UsageResponse {
         #expect(try StatusClient.parse(Data(json.utf8)).hasProblem == false)
     }
 
-    @Test func newIncidentsOnlyAfterFirstFetch() throws {
+    @Test func trackerNotifiesStartOnceIncludingFirstFetch() throws {
         let status = try StatusClient.parse(Data(sample.utf8))
-        #expect(StatusClient.newIncidents(from: nil, to: status).isEmpty)
-        let calm = ServiceStatus(level: .operational, summary: "")
-        #expect(StatusClient.newIncidents(from: calm, to: status).map(\.id) == ["a1"])
-        #expect(StatusClient.newIncidents(from: status, to: status).isEmpty)
+        var tracker = IncidentTracker()
+        #expect(tracker.update(with: status).started.map(\.id) == ["a1"])
+        #expect(tracker.update(with: status) == .init(started: [], resolved: []))
+    }
+
+    @Test func trackerRemembersAcrossLaunches() throws {
+        let status = try StatusClient.parse(Data(sample.utf8))
+        var restored = IncidentTracker(active: ["a1": "Elevated errors on Claude Opus"])
+        #expect(restored.update(with: status).started.isEmpty)
+    }
+
+    @Test func trackerReportsResolution() throws {
+        let status = try StatusClient.parse(Data(sample.utf8))
+        var tracker = IncidentTracker()
+        _ = tracker.update(with: status)
+        let changes = tracker.update(with: ServiceStatus(level: .operational, summary: ""))
+        #expect(changes.resolved == ["Elevated errors on Claude Opus"])
+        #expect(tracker.active.isEmpty)
     }
 }

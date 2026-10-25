@@ -19,6 +19,8 @@ enum AppSettings {
     static let statusAlertsEnabled = "statusAlertsEnabled"
     /// 알림과 함께 소리를 낼지
     static let notificationSound = "notificationSound"
+    /// 발생 알림을 보낸, 아직 복구되지 않은 장애 (ID → 이름)
+    static let notifiedIncidents = "notifiedIncidents"
 
     static let refreshOptions = [1, 2, 5, 10, 15, 30]
     static let maxAlertThresholds = 5

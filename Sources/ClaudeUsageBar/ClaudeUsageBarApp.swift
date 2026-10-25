@@ -33,6 +33,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
 
         if Notifier.isAvailable {
             UNUserNotificationCenter.current().delegate = self
+            Notifier.removeLegacyScheduledNotifications()
             if UserDefaults.standard.bool(forKey: AppSettings.connected), AppSettings.wantsNotifications {
                 Notifier.requestAuthorization()
             }
@@ -45,6 +46,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        completionHandler([.banner, .sound])
+        // 소리는 Notifier가 직접 재생하므로 여기서는 배너만 보여 줍니다.
+        completionHandler([.banner, .list])
     }
 }

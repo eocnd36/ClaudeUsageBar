@@ -86,10 +86,29 @@ public struct StatusClient: Sendable {
         return ServiceStatus(level: level, summary: summary.status?.description ?? "", incidents: incidents)
     }
 
-    /// 이전 상태에는 없던 새 장애. 앱을 켤 때마다 진행 중인 장애로 알림이 오지 않도록 첫 조회(old == nil)에서는 비웁니다.
-    public static func newIncidents(from old: ServiceStatus?, to new: ServiceStatus) -> [ServiceStatus.Incident] {
-        guard let old else { return [] }
-        let known = Set(old.incidents.map(\.id))
-        return new.incidents.filter { !known.contains($0.id) }
+}
+
+/// 어떤 장애를 이미 알렸는지 기억해서, 장애마다 "발생"과 "복구" 알림을 한 번씩만 보내게 합니다.
+/// 기억한 ID는 앱을 다시 켜도 유지되므로(UserDefaults), 켤 때마다 같은 알림이 오지 않습니다.
+public struct IncidentTracker: Equatable, Sendable {
+    /// 발생을 알린, 아직 복구되지 않은 장애 (ID → 이름)
+    public private(set) var active: [String: String]
+
+    public init(active: [String: String] = [:]) {
+        self.active = active
+    }
+
+    public struct Changes: Equatable, Sendable {
+        public var started: [ServiceStatus.Incident]
+        public var resolved: [String]
+    }
+
+    /// 새 상태를 반영하고 알려야 할 변화(새 장애, 복구된 장애 이름)를 돌려줍니다.
+    public mutating func update(with status: ServiceStatus) -> Changes {
+        let current = Dictionary(status.incidents.map { ($0.id, $0.name) }, uniquingKeysWith: { first, _ in first })
+        let started = status.incidents.filter { active[$0.id] == nil }
+        let resolved = active.filter { current[$0.key] == nil }.map(\.value).sorted()
+        active = current
+        return Changes(started: started, resolved: resolved)
     }
 }

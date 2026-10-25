@@ -249,9 +249,18 @@ final class UsageStore: ObservableObject {
 
     private func refreshServiceStatus(generation: Int) async {
         guard let status = try? await statusClient.fetch(), generation == self.generation else { return }
-        if UserDefaults.standard.bool(forKey: AppSettings.statusAlertsEnabled) {
-            for incident in StatusClient.newIncidents(from: serviceStatus, to: status) {
+        // 이미 알린 장애는 앱을 다시 켜도 기억해서, 장애마다 발생·복구 알림을 한 번씩만 보냅니다.
+        let defaults = UserDefaults.standard
+        let known = defaults.dictionary(forKey: AppSettings.notifiedIncidents) as? [String: String] ?? [:]
+        var tracker = IncidentTracker(active: known)
+        let changes = tracker.update(with: status)
+        defaults.set(tracker.active, forKey: AppSettings.notifiedIncidents)
+        if defaults.bool(forKey: AppSettings.statusAlertsEnabled) {
+            for incident in changes.started {
                 Notifier.post(title: String(localized: "Claude is having issues"), body: incident.name)
+            }
+            for name in changes.resolved {
+                Notifier.post(title: String(localized: "Claude is back to normal"), body: name)
             }
         }
         serviceStatus = status

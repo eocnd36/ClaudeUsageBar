@@ -40,38 +40,57 @@ enum Notifier {
     }
 
     static func post(title: String, body: String) {
-        add(identifier: UUID().uuidString, title: title, body: body, trigger: nil)
+        add(identifier: UUID().uuidString, title: title, body: body)
+        playSound()
     }
 
-    private static let reminderPrefix = "reset-reminder-"
+    /// Apple 정식 서명이 없는 앱은 macOS가 알림 소리를 빼 버리는 경우가 있어, 소리는 앱이 직접 재생합니다.
+    private static func playSound() {
+        guard UserDefaults.standard.bool(forKey: AppSettings.notificationSound) else { return }
+        DispatchQueue.main.async {
+            (NSSound(named: "Glass") ?? NSSound(named: "Ping"))?.play()
+        }
+    }
+
+    /// 예약해 둔 초기화 알림. 시스템 예약 알림은 소리를 직접 낼 수 없어 앱이 시각을 재다가 보냅니다.
+    /// (메뉴 막대 앱이라 항상 실행 중이고, 잠자기에서 깨어나면 다시 예약됩니다.)
+    @MainActor private static var scheduled: [String: Task<Void, Never>] = [:]
 
     /// 초기화 관련 알림을 모두 지우고 새로 예약합니다. 같은 ID는 중복되지 않습니다.
+    @MainActor
     static func scheduleResetReminders(_ reminders: [(id: String, title: String, body: String, date: Date)]) {
-        guard isAvailable else { return }
-        let center = UNUserNotificationCenter.current()
-        center.getPendingNotificationRequests { pending in
-            let stale = pending.map(\.identifier).filter { $0.hasPrefix(reminderPrefix) }
-            center.removePendingNotificationRequests(withIdentifiers: stale)
-            for reminder in reminders {
-                let interval = reminder.date.timeIntervalSinceNow
-                guard interval > 0 else { continue }
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
-                add(identifier: reminderPrefix + reminder.id, title: reminder.title, body: reminder.body, trigger: trigger)
+        scheduled.values.forEach { $0.cancel() }
+        scheduled = [:]
+        for reminder in reminders {
+            let interval = reminder.date.timeIntervalSinceNow
+            guard interval > 0 else { continue }
+            scheduled[reminder.id] = Task { @MainActor in
+                try? await Task.sleep(nanoseconds: UInt64(interval * Double(NSEC_PER_SEC)))
+                guard !Task.isCancelled else { return }
+                // 잠자기 등으로 많이 늦었다면 지난 알림은 보내지 않습니다.
+                guard Date().timeIntervalSince(reminder.date) < 5 * 60 else { return }
+                post(title: reminder.title, body: reminder.body)
             }
         }
     }
 
+    /// 1.1.0 이전에는 초기화 알림을 시스템에 예약했습니다. 지금은 앱이 직접 보내므로 남은 예약을 지웁니다.
+    static func removeLegacyScheduledNotifications() {
+        guard isAvailable else { return }
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    }
+
+    @MainActor
     static func cancelResetReminders() {
         scheduleResetReminders([])
     }
 
-    private static func add(identifier: String, title: String, body: String, trigger: UNNotificationTrigger?) {
+    private static func add(identifier: String, title: String, body: String) {
         guard isAvailable else { return }
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
-        content.sound = UserDefaults.standard.bool(forKey: AppSettings.notificationSound) ? .default : nil
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request) { error in
             if let error {
                 log.error("Failed to add \(identifier, privacy: .public): \(error.localizedDescription, privacy: .public)")
