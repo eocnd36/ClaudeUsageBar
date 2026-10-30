@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> **Claude Usage Bar is now [Kongi](https://github.com/eocnd36/Kongi)** — a Dynamic Island for Macs without a notch, with a live view of Claude Code, approvals from the island and an Android app. Usage in the menu bar is still there. This repository is no longer updated; get the new version at **[github.com/eocnd36/Kongi](https://github.com/eocnd36/Kongi)**.
+>
+> **Claude Usage Bar는 이제 [Kongi(콩이)](https://github.com/eocnd36/Kongi)예요.** 새 버전은 **[github.com/eocnd36/Kongi](https://github.com/eocnd36/Kongi)**에서 받으세요. 이 저장소는 더 이상 업데이트되지 않아요.
+
 <div align="center">
 
 <img src="docs/icon.png" width="112" alt="">
